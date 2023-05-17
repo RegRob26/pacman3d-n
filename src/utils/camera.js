@@ -23,37 +23,41 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.actualizarDireccionCamara = exports.camera = void 0;
+exports.Camera = void 0;
 const THREE = __importStar(require("three"));
-exports.camera = new THREE.PerspectiveCamera(45, window.innerWidth /
-    window.innerHeight, 1, 1000);
-exports.camera.position.x = 0;
-exports.camera.position.y = 0;
-exports.camera.position.z = 0;
-function actualizarDireccionCamara(pacman, camera) {
-    let distancia = 5;
-    let direccion = pacman.userData['direccionActual'];
-    switch (direccion) {
-        case 87: // tecla 'w'
-            camera.position.x = pacman.position.x - distancia;
-            camera.position.y = pacman.position.y + distancia;
-            camera.position.z = pacman.position.z;
-            break;
-        case 83:
-            camera.position.x = pacman.position.x + distancia;
-            camera.position.y = pacman.position.y + distancia;
-            camera.position.z = pacman.position.z;
-            break;
-        case 65: // Tecla "a"
-            camera.position.x = pacman.position.x;
-            camera.position.y = pacman.position.y + distancia;
-            camera.position.z = pacman.position.z + distancia;
-            break;
-        case 68: // Tecla "d"
-            camera.position.x = pacman.position.x;
-            camera.position.y = pacman.position.y + distancia;
-            camera.position.z = pacman.position.z - distancia;
-            break;
+class Camera {
+    constructor() {
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth /
+            window.innerHeight, 1, 1000);
+        this.camera.position.x = 0;
+        this.camera.position.y = 0;
+        this.camera.position.z = 0;
+    }
+    actualizarDireccionCamara(pacman, camera) {
+        let distancia = 5;
+        let direccion = pacman.userData['direccionActual'];
+        switch (direccion) {
+            case 87: // tecla 'w'
+                camera.position.x = pacman.position.x - distancia;
+                camera.position.y = pacman.position.y + distancia;
+                camera.position.z = pacman.position.z;
+                break;
+            case 83:
+                camera.position.x = pacman.position.x + distancia;
+                camera.position.y = pacman.position.y + distancia;
+                camera.position.z = pacman.position.z;
+                break;
+            case 65: // Tecla "a"
+                camera.position.x = pacman.position.x;
+                camera.position.y = pacman.position.y + distancia;
+                camera.position.z = pacman.position.z + distancia;
+                break;
+            case 68: // Tecla "d"
+                camera.position.x = pacman.position.x;
+                camera.position.y = pacman.position.y + distancia;
+                camera.position.z = pacman.position.z - distancia;
+                break;
+        }
     }
 }
-exports.actualizarDireccionCamara = actualizarDireccionCamara;
+exports.Camera = Camera;

@@ -5,5 +5,4 @@ export function actualizarContador(puntos : any) {
     // Aplica un tamaño de fuente mayor al elemento
     contador.style.fontSize = "30px";
   }
-  return puntos
 }

@@ -29,16 +29,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const THREE = __importStar(require("three"));
 const stats_js_1 = __importDefault(require("stats.js"));
 const escenario_1 = require("../utils/escenario");
-const camera_1 = require("../utils/camera");
-const colisiones_1 = require("../utils/colisiones");
-const controlls_1 = require("../utils/controlls");
 const htmlElements_1 = require("../utils/htmlElements");
-var mazeObject = []; // Define the type for 'maze' as an array of 'MazeElement'
+const pacman_1 = require("../utils/pacman");
 // Declaracion de variables para mostrar los fps en la pantalla del juego
 //TODO quitar cuando el juego se haya terminado
 const stats = new stats_js_1.default();
 stats.showPanel(0);
 document.body.appendChild(stats.dom);
+var mazeObject = [];
 var pacman;
 var puntos = 0;
 //const canvas = <HTMLCanvasElement>document.getElementById('miCanvas');
@@ -50,29 +48,21 @@ document.body.appendChild(renderer.domElement);
 //TODO Crear una clase para el escenario
 let escenario = new escenario_1.Escenario(mazeObject, scene);
 let maze = escenario.maze;
-// Clase colisiones
-let colisiones = new colisiones_1.Colisiones();
-//Clase Controles
-let controlls = new controlls_1.Controlls(renderer);
+let key;
 pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene);
+let pacmanC = new pacman_1.Pacman(pacman, key, renderer);
+/*
+* Creación del escenerio
+*/
 //TODO Hacer que el escenario agregue lamparas automaticamente en cada esquina y al centro
 escenario.agregarLampara(scene, 0, 20, 0);
-let key;
 function animate() {
     requestAnimationFrame(animate);
-    // Actualiza la posición de la cámara en relación al objeto
-    (0, camera_1.actualizarDireccionCamara)(pacman, camera_1.camera);
-    // Hace que la cámara mire al objeto a seguir
-    camera_1.camera.lookAt(pacman.position);
-    controlls.onKeyDown(key, pacman, maze);
-    puntos = colisiones.detectarColisionPunto(pacman, mazeObject, maze, scene, puntos);
+    puntos = pacmanC.movimientoPacma.n(maze, mazeObject, puntos, scene);
     (0, htmlElements_1.actualizarContador)(puntos);
-    renderer.render(scene, camera_1.camera);
+    renderer.render(scene, pacmanC.camera);
+    //TODO retirar al finalizar la actividad
     stats.update();
 }
 animate();
-window.addEventListener('keydown', (event) => {
-    pacman.userData['direccionAnterior'] = key;
-    key = event.keyCode;
-    controlls.onKeyDown(key, pacman, maze);
-});
+pacmanC.eventoTeclado(maze);

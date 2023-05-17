@@ -31,10 +31,12 @@ const OrbitControls_js_1 = require("three/examples/jsm/controls/OrbitControls.js
 class Controlls {
     constructor(renderer) {
         this.colisiones = new colisiones_1.Colisiones();
+        this.cameraC = new camera_1.Camera();
+        this.camera = this.cameraC.camera;
         this.crearOrbitControls(renderer);
     }
     crearOrbitControls(renderer) {
-        let orbitControls = new OrbitControls_js_1.OrbitControls(camera_1.camera, renderer.domElement);
+        let orbitControls = new OrbitControls_js_1.OrbitControls(this.camera, renderer.domElement);
         orbitControls.enableDamping = true;
         orbitControls.minDistance = 5;
         orbitControls.maxDistance = 100;

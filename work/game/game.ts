@@ -1,24 +1,12 @@
   import * as THREE from 'three';
   import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
   import Stats from 'stats.js';
-
   import {Escenario} from "../utils/escenario";
-  import {camera, actualizarDireccionCamara} from "../utils/camera";
+  import {Camera} from "../utils/camera";
   import {Colisiones} from "../utils/colisiones";
   import {Controlls} from "../utils/controlls";
   import {actualizarContador} from "../utils/htmlElements";
-
-
-  //TODO Ya se crearon los distintos archivos con las funciones que se necesitan para el juego, ahora hay que organizarlas en clases
-  //puesto que esto a lo que veo si es posible, como que escenario sea una clase y que tenga sus propios metodos con las funciones
-  //que ya hay en ese archivo, al igual con camara y colisiones, y en el archivo game.ts solo se llamen a los metodos de las clases
-
-  type MazeElement = {
-    valor: number;
-    objeto: any; // Replace 'any' with the appropriate type for the objects in the maze
-  };
-
-  var mazeObject: MazeElement[][] = []; // Define the type for 'maze' as an array of 'MazeElement'
+  import {Pacman} from "../utils/pacman";
 
 
   // Declaracion de variables para mostrar los fps en la pantalla del juego
@@ -26,6 +14,16 @@
   const stats = new Stats()
   stats.showPanel(0)
   document.body.appendChild(stats.dom)
+
+  /*
+  Zona de declaración de variables e instanciación de clases
+   */
+  type MazeElement = {
+    valor: number;
+    objeto: any;
+  };
+
+  var mazeObject: MazeElement[][] = [];
 
 
   var pacman: any
@@ -44,42 +42,35 @@
   let escenario = new Escenario(mazeObject, scene)
   let maze = escenario.maze
 
-  // Clase colisiones
-  let colisiones = new Colisiones()
-
-  //Clase Controles
-  let controlls = new Controlls(renderer)
-
-
-  pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene)
-
-  //TODO Hacer que el escenario agregue lamparas automaticamente en cada esquina y al centro
-  escenario.agregarLampara(scene, 0, 20, 0)
-
 
   let key: any
+
+  pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene)
+  let pacmanC = new Pacman(pacman, key, renderer)
+
+  /*
+  * Creación del escenerio
+  */
+  //TODO Hacer que el escenario agregue lamparas automaticamente en cada esquina y al centro
+  escenario.agregarLampara(scene, 0, 20, 0)
 
 
   function animate() {
 
     requestAnimationFrame(animate)
-    // Actualiza la posición de la cámara en relación al objeto
-    actualizarDireccionCamara(pacman, camera)
-    // Hace que la cámara mire al objeto a seguir
-    camera.lookAt(pacman.position)
-    controlls.onKeyDown(key, pacman, maze)
-    puntos = colisiones.detectarColisionPunto(pacman, mazeObject, maze, scene, puntos);
-    actualizarContador(puntos)
-    renderer.render(scene, camera)
 
+    puntos = pacmanC.movimientoPacma.n(maze, mazeObject, puntos, scene)
+    actualizarContador(puntos)
+
+
+    renderer.render(scene, pacmanC.camera)
+
+
+
+    //TODO retirar al finalizar la actividad
     stats.update()
   }
 
   animate()
-  window.addEventListener('keydown', (event: any) => {
-    pacman.userData['direccionAnterior'] = key
-    key = event.keyCode
-    controlls.onKeyDown(key, pacman, maze)
-
-  })
+  pacmanC.eventoTeclado(maze)
 

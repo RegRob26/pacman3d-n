@@ -1,17 +1,21 @@
 import * as THREE from "three";
 import {Colisiones} from "./colisiones";
-import {camera} from "./camera";
+import {Camera} from "./camera";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 
 export class Controlls{
   private colisiones : any
+  private cameraC : any
+  private camera : any
   constructor(renderer : any) {
     this.colisiones = new Colisiones()
+    this.cameraC = new Camera()
+    this.camera = this.cameraC.camera
     this.crearOrbitControls(renderer)
   }
 
   crearOrbitControls(renderer : any){
-    let orbitControls = new OrbitControls(camera, renderer.domElement)
+    let orbitControls = new OrbitControls(this.camera, renderer.domElement)
     orbitControls.enableDamping = true
     orbitControls.minDistance = 5
     orbitControls.maxDistance = 100
