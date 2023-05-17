@@ -49,15 +49,10 @@ var puntos = 0;
 var scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 //TODO Estos tienen que ser parte de la futura clase escenario
-(0, escenario_1.agregarLampara)(scene, -30, 30, -10);
-(0, escenario_1.agregarLampara)(scene, 0, 30, 10);
-(0, escenario_1.agregarLampara)(scene, 0, 30, 0);
-(0, escenario_1.agregarLampara)(scene, 0, 0, 0);
-(0, escenario_1.agregarLampara)(scene, 30, 30, 30);
-// Crear una luz ambiental
-var ambientLight = new THREE.AmbientLight(0xffffff); // Color blanco
-// Agregar la luz ambiental a la escena
-//scene.add(ambientLight);
+//TODO Crear una clase para el escenario
+let escenario = new escenario_1.Escenario(mazeObject, scene);
+let maze = escenario.maze;
+console.log(maze);
 let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -65,7 +60,9 @@ document.body.appendChild(renderer.domElement);
 //mostrarGuias(scene)
 //marcarCentro(scene)
 //agregarPared(scene)
-pacman = (0, escenario_1.dibujarLaberinto)(escenario_1.maze, mazeObject, scene, pacman);
+pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene);
+//Agregando lamparas
+escenario.agregarLampara(scene, 0, 20, 0);
 console.log("ESTE ES EL INCHE OBJETO DE PACMAN: ", pacman);
 let orbitControls = (0, controlls_1.crearOrbitControls)(renderer);
 let key;
@@ -75,8 +72,8 @@ function animate() {
     (0, camera_1.actualizarDireccionCamara)(pacman, camera_1.camera);
     // Hace que la cámara mire al objeto a seguir
     camera_1.camera.lookAt(pacman.position);
-    (0, controlls_1.onKeyDown)(key, pacman, escenario_1.maze);
-    puntos = (0, colisiones_1.detectarColisionPunto)(pacman, mazeObject, escenario_1.maze, scene, puntos);
+    (0, controlls_1.onKeyDown)(key, pacman, maze);
+    puntos = (0, colisiones_1.detectarColisionPunto)(pacman, mazeObject, maze, scene, puntos);
     (0, htmlElements_1.actualizarContador)(puntos);
     renderer.render(scene, camera_1.camera);
     stats.update();
@@ -85,5 +82,5 @@ animate();
 window.addEventListener('keydown', (event) => {
     pacman.userData['direccionAnterior'] = key;
     key = event.keyCode;
-    (0, controlls_1.onKeyDown)(key, pacman, escenario_1.maze);
+    (0, controlls_1.onKeyDown)(key, pacman, maze);
 });

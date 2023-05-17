@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from 'stats.js';
 
-import {dibujarLaberinto, agregarLampara, maze} from "../utils/escenario";
+import {Escenario} from "../utils/escenario";
 import {camera, actualizarDireccionCamara} from "../utils/camera";
 import {detectarColisionBarrera, detectarColisionPunto} from "../utils/colisiones";
 import {crearOrbitControls, onKeyDown} from "../utils/controlls";
@@ -38,17 +38,12 @@ console.log("Ejecutando el juego")
 
 
     //TODO Estos tienen que ser parte de la futura clase escenario
-    agregarLampara(scene, -30, 30, -10)
-    agregarLampara(scene, 0, 30, 10)
-    agregarLampara(scene, 0, 30, 0)
-    agregarLampara(scene, 0, 0, 0)
-    agregarLampara(scene, 30, 30, 30)
+    //TODO Crear una clase para el escenario
 
-// Crear una luz ambiental
-    var ambientLight = new THREE.AmbientLight(0xffffff); // Color blanco
+    let escenario = new Escenario(mazeObject, scene)
+    let maze = escenario.maze
+console.log(maze)
 
-// Agregar la luz ambiental a la escena
-    //scene.add(ambientLight);
 
     let renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -59,7 +54,11 @@ console.log("Ejecutando el juego")
     //marcarCentro(scene)
     //agregarPared(scene)
 
-    pacman = dibujarLaberinto(maze, mazeObject, scene, pacman)
+    pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene)
+
+//Agregando lamparas
+    escenario.agregarLampara(scene, 0, 20, 0)
+
     console.log("ESTE ES EL INCHE OBJETO DE PACMAN: ", pacman)
     let orbitControls = crearOrbitControls(renderer)
     let key: any
