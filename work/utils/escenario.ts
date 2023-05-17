@@ -27,6 +27,7 @@ export class Escenario {
   dibujarLaberinto(matrix: any, mazeObject: any, scene: any) {
     let labyrinth = []
     let pacman
+    scene.background = new THREE.Color(0x000000)
     // Recorrer la matriz y dibujar las paredes
     console.log("Dibujando escenario")
     for (let i = 0; i < matrix.length; i++) {
