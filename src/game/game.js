@@ -31,6 +31,7 @@ const stats_js_1 = __importDefault(require("stats.js"));
 const escenario_1 = require("../utils/escenario");
 const htmlElements_1 = require("../utils/htmlElements");
 const pacman_1 = require("../utils/pacman");
+const fantasma_1 = require("../utils/fantasma");
 // Declaracion de variables para mostrar los fps en la pantalla del juego
 //TODO quitar cuando el juego se haya terminado
 const stats = new stats_js_1.default();
@@ -39,7 +40,6 @@ document.body.appendChild(stats.dom);
 var mazeObject = [];
 var pacman;
 var puntos = 0;
-//const canvas = <HTMLCanvasElement>document.getElementById('miCanvas');
 var scene = new THREE.Scene();
 let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -56,9 +56,13 @@ let pacmanC = new pacman_1.Pacman(pacman, key, renderer);
 */
 //TODO Hacer que el escenario agregue lamparas automaticamente en cada esquina y al centro
 escenario.agregarLampara(scene, 0, 20, 0);
+/*
+ * Instancia de clase fantasma
+ */
+let fantasmaC = new fantasma_1.Fantasma(scene, 8, 0.5, 4);
 function animate() {
     requestAnimationFrame(animate);
-    puntos = pacmanC.movimientoPacma.n(maze, mazeObject, puntos, scene);
+    puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, scene);
     (0, htmlElements_1.actualizarContador)(puntos);
     renderer.render(scene, pacmanC.camera);
     //TODO retirar al finalizar la actividad

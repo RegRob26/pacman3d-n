@@ -1,16 +1,14 @@
   import * as THREE from 'three';
-  import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
   import Stats from 'stats.js';
   import {Escenario} from "../utils/escenario";
-  import {Camera} from "../utils/camera";
-  import {Colisiones} from "../utils/colisiones";
-  import {Controlls} from "../utils/controlls";
   import {actualizarContador} from "../utils/htmlElements";
   import {Pacman} from "../utils/pacman";
+  import {Fantasma} from "../utils/fantasma";
 
 
   // Declaracion de variables para mostrar los fps en la pantalla del juego
   //TODO quitar cuando el juego se haya terminado
+
   const stats = new Stats()
   stats.showPanel(0)
   document.body.appendChild(stats.dom)
@@ -22,13 +20,10 @@
     valor: number;
     objeto: any;
   };
-
   var mazeObject: MazeElement[][] = [];
-
 
   var pacman: any
   var puntos: number = 0;
-  //const canvas = <HTMLCanvasElement>document.getElementById('miCanvas');
   var scene = new THREE.Scene();
 
   let renderer = new THREE.WebGLRenderer({antialias: true});
@@ -41,8 +36,6 @@
 
   let escenario = new Escenario(mazeObject, scene)
   let maze = escenario.maze
-
-
   let key: any
 
   pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene)
@@ -55,17 +48,19 @@
   escenario.agregarLampara(scene, 0, 20, 0)
 
 
-  function animate() {
+  /*
+   * Instancia de clase fantasma
+   */
+    let fantasmaC = new Fantasma(scene, 8, 0.5, 4)
 
+  function animate() {
     requestAnimationFrame(animate)
 
-    puntos = pacmanC.movimientoPacma.n(maze, mazeObject, puntos, scene)
+    puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, scene)
     actualizarContador(puntos)
 
 
     renderer.render(scene, pacmanC.camera)
-
-
 
     //TODO retirar al finalizar la actividad
     stats.update()
