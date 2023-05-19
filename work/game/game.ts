@@ -53,7 +53,7 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaC = new Fantasma(scene, 1, 0.5, 15)
+    let fantasmaC = new Fantasma(scene, 2, 0.5, 1)
 
 
   //Prueba de hilos

@@ -67,7 +67,7 @@ export class Fantasma{
     if (camino.length > 0) {
       let movimiento = camino.pop()
       let max = camino.length
-      let intervalo = t_max /5; // 1 segundo (1000 milisegundos)
+      let intervalo = t_max / 5; // 1 segundo (1000 milisegundos)
 
 
       const movimientoTemporizado = () => {
@@ -76,10 +76,25 @@ export class Fantasma{
         if (max > 0 && movimiento != undefined) {
 
           matrix[this.fantasma.position.x][this.fantasma.position.z] = 0
-          this.fantasma.position.x += -this.fantasma.position.x + movimiento.i;
-          this.fantasma.position.z += -this.fantasma.position.z + movimiento.j;
+          let pasos = 0
+          let pasoX = movimiento.i / 4
+          let pasoZ = movimiento.j /4
+          let pasoX_fa = this.fantasma.position.x / 4
+          let pasoZ_fa = this.fantasma.position.z / 4
+          console.log("Fantasma: ", this.fantasma.position.x, this.fantasma.position.z)
 
+            while (pasos <= 3){
+              const relentizaMovimiento = () =>{
+
+              this.fantasma.position.x += -pasoX_fa + pasoX;
+              this.fantasma.position.z += -pasoZ_fa+ pasoZ;
+              pasos++
+                setTimeout(relentizaMovimiento, 300)
+              }
+              relentizaMovimiento()
+          }
           valorMatriz = matrix[this.fantasma.position.x][this.fantasma.position.z]
+
           matrix[this.fantasma.position.x][this.fantasma.position.z] = 3
           movimiento = camino.pop();
           max = camino.length + 1
@@ -105,7 +120,8 @@ export class Fantasma{
 
     let actual = k_valor
     // Coordenadas relativas de los vecinos
-    const coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
+    //const coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
+    const coordenadasRelativas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
     let pasos = 0
     while (!(actual.i === final_x && actual.j === final_y)) {
 
