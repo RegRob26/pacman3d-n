@@ -11,6 +11,14 @@ export class Colisiones{
     return maze[posX][posZ] === 1
   }
 
+  detectarColisionFantasma(pacman: any, maze: any) {
+    // Obtener la posición actual del pacman
+    const posX = pacman.x;
+    const posZ = pacman.z;
+    return maze[posX][posZ] === 3
+  }
+
+
   detectarColisionPunto(pacman: any, mazeObject: any, maze: any, scene: any, puntos: any){
     // Obtener la posición actual del pacman
 

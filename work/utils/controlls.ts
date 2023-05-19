@@ -31,9 +31,9 @@ export class Controlls{
   onKeyDown(event: any, pacman: any, laberinto: any) {
     //TODO arreglar los controles porque no detecta cuando no esta viendo hacia el lado en el que inicia, entonces
     // se desorientan los controles y gira para lados poco naturales
-    let speed = 0.05;
+    let speed = 0.06;
     let posicionNueva;
-    let pacmanRadio = 0.5
+    let pacmanRadio = 0.30
     // Si no hay colisión, procesar la tecla presionada
     switch (event) {
 

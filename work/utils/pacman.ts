@@ -2,7 +2,7 @@ import {Colisiones} from "./colisiones";
 import {Controlls} from "./controlls";
 import {Camera} from "./camera";
 import {actualizarContador} from "./htmlElements";
-
+import * as THREE from "three";
 
 export class Pacman{
   private colisiones: any
@@ -11,6 +11,7 @@ export class Pacman{
   public camera: any
   public pacman : any
   public key : any
+  private fantasma : any
   constructor(pacman : any, key : any, renderer : any) {
     // Clase colisiones
     this.colisiones = new Colisiones()
@@ -32,6 +33,14 @@ export class Pacman{
     this.camera.lookAt(this.pacman.position)
     this.controlls.onKeyDown(this.key, this.pacman, maze)
     puntos = this.colisiones.detectarColisionPunto(this.pacman, mazeObject, maze, scene, puntos);
+
+    let posicionNueva = new THREE.Vector3(Math.round(this.pacman.position.x),
+        this.pacman.position.y,
+        Math.round(this.pacman.position.z))
+    this.fantasma = this.colisiones.detectarColisionFantasma(posicionNueva, maze)
+    if(this.fantasma){
+      return -3
+    }
     return puntos
   }
 

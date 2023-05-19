@@ -1,7 +1,7 @@
   import * as THREE from 'three';
-  //import Stats from 'stats';
+  import Stats from 'three/examples/jsm/libs/stats.module.js'
   import {Escenario} from "../utils/escenario";
-  import {actualizarContador, finNivelMensaje} from "../utils/htmlElements";
+  import {actualizarContador, finNivelMensaje, gameOver} from "../utils/htmlElements";
   import {Pacman} from "../utils/pacman";
   import {Fantasma} from "../utils/fantasma";
 
@@ -9,9 +9,9 @@
   // Declaracion de variables para mostrar los fps en la pantalla del juego
   //TODO quitar cuando el juego se haya terminado
 
-  //const stats = new Stats()
-  //stats.showPanel(0)
-  //document.body.appendChild(stats.dom)
+  const stats = new Stats()
+  stats.showPanel(0)
+  document.body.appendChild(stats.dom)
 
   /*
   Zona de declaración de variables e instanciación de clases
@@ -53,29 +53,49 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaC = new Fantasma(scene, 1, 0.5, 6)
+    let fantasmaC = new Fantasma(scene, 1, 0.5, 15)
 
+
+  //Prueba de hilos
+
+  let worker = new Worker('/work/utils/fantasma.ts')
   function animate() {
 
-    if (puntos < total_puntos) {
+    if (puntos < total_puntos && puntos != -3) {
       requestAnimationFrame(animate)
 
       puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, scene)
       actualizarContador(puntos)
+      console.log(maze)
+        //TODO hacer que el fantasma se mueva en un hilo aparte
 
-      fantasmaC.movimientoFantasma(pacman, maze)
-
+      //fantasmaC.movimientoFantasma(pacman, maze, 10000)
 
       renderer.render(scene, pacmanC.camera)
     }
     else{
-      finNivelMensaje()
+      if (puntos == -3){
+        gameOver()
+        return
+      }else {
+        finNivelMensaje()
+
+      }
     }
 
 
     //TODO retirar al finalizar la actividad
-   // stats.update()
+    stats.update()
   }
+  setInterval(moveGhostEvery10Seconds, 1000);
+
+  function moveGhostEvery10Seconds() {
+    fantasmaC.movimientoFantasma(pacman, maze, 1000);
+  }
+  // Función para mover el fantasma cada 10 segundos
+
+
+  // Ejecutar la función de movimiento del fantasma cada 10 segundos
 
   animate()
   pacmanC.eventoTeclado(maze)

@@ -15,3 +15,13 @@ export function finNivelMensaje() {
     contador.style.fontSize = "50px";
   }
 }
+
+export function gameOver() {
+  let contador = document.getElementById("gameOver")
+  if (contador !== null) {
+    contador.innerHTML = 'Has perdido!'
+    // Aplica un tamaño de fuente mayor al elemento
+    contador.style.fontSize = "50px";
+    contador.style.color = "red";
+  }
+}
