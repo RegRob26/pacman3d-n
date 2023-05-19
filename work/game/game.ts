@@ -1,7 +1,7 @@
   import * as THREE from 'three';
-  import Stats from 'stats.js';
+  //import Stats from 'stats';
   import {Escenario} from "../utils/escenario";
-  import {actualizarContador} from "../utils/htmlElements";
+  import {actualizarContador, finNivelMensaje} from "../utils/htmlElements";
   import {Pacman} from "../utils/pacman";
   import {Fantasma} from "../utils/fantasma";
 
@@ -9,9 +9,9 @@
   // Declaracion de variables para mostrar los fps en la pantalla del juego
   //TODO quitar cuando el juego se haya terminado
 
-  const stats = new Stats()
-  stats.showPanel(0)
-  document.body.appendChild(stats.dom)
+  //const stats = new Stats()
+  //stats.showPanel(0)
+  //document.body.appendChild(stats.dom)
 
   /*
   Zona de declaración de variables e instanciación de clases
@@ -36,6 +36,8 @@
 
   let escenario = new Escenario(mazeObject, scene)
   let maze = escenario.maze
+  let total_puntos = escenario.total_puntos
+
   let key: any
 
   pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene)
@@ -51,19 +53,28 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaC = new Fantasma(scene, 8, 0.5, 4)
+    let fantasmaC = new Fantasma(scene, 4, 0.5, 8)
 
   function animate() {
-    requestAnimationFrame(animate)
 
-    puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, scene)
-    actualizarContador(puntos)
+    if (puntos < total_puntos) {
+      requestAnimationFrame(animate)
+
+      puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, scene)
+      actualizarContador(puntos)
+
+      fantasmaC.movimientoFantasma(pacman, maze)
 
 
-    renderer.render(scene, pacmanC.camera)
+      renderer.render(scene, pacmanC.camera)
+    }
+    else{
+      finNivelMensaje()
+    }
+
 
     //TODO retirar al finalizar la actividad
-    stats.update()
+   // stats.update()
   }
 
   animate()

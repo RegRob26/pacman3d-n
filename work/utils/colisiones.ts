@@ -8,7 +8,7 @@ export class Colisiones{
     // Obtener la posición actual del pacman
     const posX = pacman.x;
     const posZ = pacman.z;
-    return maze[posZ][posX] === 1
+    return maze[posX][posZ] === 1
   }
 
   detectarColisionPunto(pacman: any, mazeObject: any, maze: any, scene: any, puntos: any){
@@ -19,17 +19,16 @@ export class Colisiones{
       pacman.position.y,
       Math.round(pacman.position.z)
     );
-
-
-    let arreglo = mazeObject[pacmanPosicion.z][pacmanPosicion.x].objeto
-    if (maze[pacmanPosicion.z][pacmanPosicion.x] === 0) {
+    console.log("Pacman", pacmanPosicion.x, pacmanPosicion.z, mazeObject[pacmanPosicion.x][pacmanPosicion.z])
+    let arreglo = mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto
+    if (maze[pacmanPosicion.x][pacmanPosicion.z] === 0) {
       console.log("Se logro algo", arreglo)
-      maze[pacmanPosicion.z][pacmanPosicion.x] = -1
+      maze[pacmanPosicion.x][pacmanPosicion.z] = -1
 
-      scene.remove(mazeObject[pacmanPosicion.z][pacmanPosicion.x].objeto)
+      scene.remove(mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto)
 
-      mazeObject[pacmanPosicion.z][pacmanPosicion.x].objeto = -1
-      mazeObject[pacmanPosicion.z][pacmanPosicion.x].valor = -1
+      mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto = -1
+      mazeObject[pacmanPosicion.x][pacmanPosicion.z].valor = -1
 
       puntos++
     }

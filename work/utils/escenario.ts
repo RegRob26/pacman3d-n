@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 export class Escenario {
   maze: number[][]
-
+  total_puntos: number
   constructor( mazeObject : any, scene : any) {
     this.maze = [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -21,27 +21,31 @@ export class Escenario {
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ]
-
+    this.total_puntos = this.detectarPuntos(this.maze)
   }
 
   dibujarLaberinto(matrix: any, mazeObject: any, scene: any) {
     let labyrinth = []
     let pacman
     scene.background = new THREE.Color(0x000000)
+
+    const ambientLight = new THREE.AmbientLight(0xffffff); // Color y intensidad
+    scene.add(ambientLight);
+
+
     // Recorrer la matriz y dibujar las paredes
-    console.log("Dibujando escenario")
     for (let i = 0; i < matrix.length; i++) {
       mazeObject[i] = []
       for (let j = 0; j < matrix[i].length; j++) {
         if (matrix[i][j] === 1) {
-          const geometry = new THREE.BoxGeometry(1, 1, 1);
+          const geometry = new THREE.BoxGeometry(1, 0.5, 1);
           geometry.computeBoundingBox();
 
-          const material = new THREE.MeshStandardMaterial({color: 0x0000ff, roughness: 0.3, metalness: 1});
+          const material = new THREE.MeshStandardMaterial({color: 0x007fff, roughness: 1, metalness: 0.3});
           const wall = new THREE.Mesh(geometry, material);
 
-          wall.position.x = j;
-          wall.position.z = i;
+          wall.position.x = i;
+          wall.position.z = j;
           wall.position.y = 0.5
 
           mazeObject[i][j] = {
@@ -51,15 +55,17 @@ export class Escenario {
           labyrinth.push(wall)
           scene.add(wall)
         }
+
+        //Esto posiblemente se cambie hacia la clase pacman
         if (matrix[i][j] === 2) {
-          pacman = this.dibujarPacman(scene, j, 0.5, i)
+          pacman = this.dibujarPacman(scene, i, 0.5, j)
           mazeObject[i][j] = {
             valor: matrix[i][j],
             objeto: pacman
           };
         }
         if (matrix[i][j] === 0) {
-          const punto = this.dibujarPuntos(scene, j, 0.5, i)
+          const punto = this.dibujarPuntos(scene, i, 0.5, j)
           mazeObject[i][j] = {
             valor: matrix[i][j],
             objeto: punto
@@ -68,7 +74,7 @@ export class Escenario {
         }
       }
     }
-    console.log(scene)
+    console.log("Escenario dibujado", matrix)
     return pacman
   }
 
@@ -101,7 +107,7 @@ export class Escenario {
 
   private dibujarPuntos(scene: any, x: any, y: any, z: any) {
     const esferaGeometria = new THREE.SphereGeometry(0.1, 64, 64)
-    const material = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.3, metalness: 1});
+    const material = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.7, metalness: 0.6});
     let punto = new THREE.Mesh(esferaGeometria, material);
 
     punto.position.x = x
@@ -110,6 +116,19 @@ export class Escenario {
 
     scene.add(punto);
     return punto
+  }
+
+  detectarPuntos(maze : any){
+    let puntos = 0
+    for(let i = 0; i < maze.length; i++){
+      for(let j = 0; j < maze[i].length; j++){
+        if(maze[i][j] === 0){
+          puntos++
+        }
+      }
+    }
+    console.log("Conteo de puntos realizado: ", puntos)
+    return puntos
   }
 
   agregarPared(scene: any) {

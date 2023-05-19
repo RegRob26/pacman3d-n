@@ -27,7 +27,6 @@ export class Pacman{
 
   movimientoPacman(maze : any, mazeObject : any, puntos : any, scene : any){
     // Actualiza la posición de la cámara en relación al objeto
-    console.log(this.pacman, this.camera)
     this.camaraC.actualizarDireccionCamara(this.pacman, this.camera)
     // Hace que la cámara mire al objeto a seguir
     this.camera.lookAt(this.pacman.position)
