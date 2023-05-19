@@ -74,7 +74,6 @@ export class Escenario {
         }
       }
     }
-    console.log("Escenario dibujado", matrix)
     return pacman
   }
 

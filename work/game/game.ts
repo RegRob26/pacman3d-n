@@ -53,7 +53,7 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaC = new Fantasma(scene, 4, 0.5, 8)
+    let fantasmaC = new Fantasma(scene, 1, 0.5, 6)
 
   function animate() {
 
