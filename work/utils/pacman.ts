@@ -32,7 +32,7 @@ export class Pacman{
     // Hace que la cámara mire al objeto a seguir
     this.camera.lookAt(this.pacman.position)
     this.controlls.onKeyDown(this.key, this.pacman, maze)
-    puntos = this.colisiones.detectarColisionPunto(this.pacman, mazeObject, maze, scene, puntos);
+    puntos = this.colisiones.detectarColisionPunto(this.pacman, mazeObject, maze, scene, puntos)
 
     let posicionNueva = new THREE.Vector3(Math.round(this.pacman.position.x),
         this.pacman.position.y,

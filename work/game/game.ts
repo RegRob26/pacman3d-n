@@ -53,13 +53,10 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaR = new Fantasma(scene, 6, 0.5, 10)
-    let fantasmaP = new Fantasma(scene, 6, 0.5, 9)
+    let fantasmaR = new Fantasma(scene, 5, 0.5, 10)
+    let fantasmaP = new Fantasma(scene, 5, 0.5, 9)
 
   let fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
-  //Prueba de hilos
-
-  let worker = new Worker('/work/utils/fantasma.ts')
   function animate() {
 
     if (puntos < total_puntos && puntos != -3) {
@@ -67,12 +64,6 @@
 
       puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, fantasmas,  scene)
       actualizarContador(puntos)
-//      pacman.userData['direccionActual'] = 65
-
-      drawLine(pacman?.userData['direccionActual'])
-        //TODO hacer que el fantasma se mueva en un hilo aparte
-
-      //fantasmaC.movimientoFantasma(pacman, maze, 10000)
 
       renderer.render(scene, pacmanC.camera)
     }
@@ -95,10 +86,10 @@
 
 
   function moveGhostEvery10Seconds(t : any) {
-    fantasmaR.movimientoFantasma(pacman, maze, t);
+    fantasmaR.movimientoFantasma(pacmanC, maze, t);
   }
   function moverFantasma(t : any){
-    fantasmaP.movimientoFantasma(pacman, maze, t)
+    fantasmaP.movimientoFantasma(pacmanC, maze, t)
   }
 
   // Función para mover el fantasma cada 10 segundos

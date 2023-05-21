@@ -5,21 +5,22 @@ export class Escenario {
   total_puntos: number
   constructor( mazeObject : any, scene : any) {
     this.maze = [
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, -1, 1, 1, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 2, 1, -1, -1, -1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 0, 0, 0, 0, 2, 1, -1, -1, -1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+
     ]
     this.total_puntos = this.detectarPuntos(this.maze)
   }
@@ -65,7 +66,20 @@ export class Escenario {
           };
         }
         if (matrix[i][j] === 0) {
-          const punto = this.dibujarPuntos(scene, i, 0.5, j)
+          const punto = this.dibujarPuntos(scene, i, 0.5, j, 0.1)
+          mazeObject[i][j] = {
+            valor: matrix[i][j],
+            objeto: punto
+          };
+        }
+        if (matrix[i][j] === -1) {
+          mazeObject[i][j] = {
+            valor: matrix[i][j],
+            objeto: undefined
+          };
+        }
+        if (matrix[i][j] === 3) {
+          const punto = this.dibujarPuntos(scene, i, 0.5, j, 0.3)
           mazeObject[i][j] = {
             valor: matrix[i][j],
             objeto: punto
@@ -104,8 +118,8 @@ export class Escenario {
     return pacman
   }
 
-  private dibujarPuntos(scene: any, x: any, y: any, z: any) {
-    const esferaGeometria = new THREE.SphereGeometry(0.1, 64, 64)
+  private dibujarPuntos(scene: any, x: any, y: any, z: any, tam : any) {
+    const esferaGeometria = new THREE.SphereGeometry(tam, 64, 64)
     const material = new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.7, metalness: 0.6});
     let punto = new THREE.Mesh(esferaGeometria, material);
 
@@ -123,6 +137,9 @@ export class Escenario {
       for(let j = 0; j < maze[i].length; j++){
         if(maze[i][j] === 0){
           puntos++
+        }
+        if (maze[i][j] === 3){
+          puntos += 3
         }
       }
     }
