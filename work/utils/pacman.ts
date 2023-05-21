@@ -26,7 +26,7 @@ export class Pacman{
 
   }
 
-  movimientoPacman(maze : any, mazeObject : any, puntos : any, scene : any){
+  movimientoPacman(maze : any, mazeObject : any, puntos : any, fantasmas : any, scene : any){
     // Actualiza la posición de la cámara en relación al objeto
     this.camaraC.actualizarDireccionCamara(this.pacman, this.camera)
     // Hace que la cámara mire al objeto a seguir
@@ -37,7 +37,7 @@ export class Pacman{
     let posicionNueva = new THREE.Vector3(Math.round(this.pacman.position.x),
         this.pacman.position.y,
         Math.round(this.pacman.position.z))
-    this.fantasma = this.colisiones.detectarColisionFantasma(posicionNueva, maze)
+    this.fantasma = this.colisiones.detectarColisionFantasma(posicionNueva, fantasmas)
     if(this.fantasma){
       return -3
     }
@@ -48,6 +48,7 @@ export class Pacman{
     window.addEventListener('keydown', (event: any) => {
       this.pacman.userData['direccionAnterior'] = this.key
       this.key = event.keyCode
+
       this.controlls.onKeyDown(this.key, this.pacman, maze)
     })
   }

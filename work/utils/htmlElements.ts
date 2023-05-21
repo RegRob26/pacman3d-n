@@ -25,3 +25,32 @@ export function gameOver() {
     contador.style.color = "red";
   }
 }
+export function drawLine(key) {
+  let parrafo = document.getElementById("linea")
+  switch (key) {
+    case 87:
+      if (parrafo !== null) {
+        parrafo.innerHTML = '^' +
+            '|'
+      }
+        break
+    case 83:
+      if (parrafo !== null) {
+        parrafo.innerHTML = '|' +
+            'v'
+      }
+        break
+    case 65:
+      if (parrafo !== null) {
+        parrafo.innerHTML = '->'
+      }
+        break
+    case 68:
+      if (parrafo !== null) {
+        parrafo.innerHTML = '<-'
+      }
+        break
+  }
+
+
+}

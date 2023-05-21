@@ -1,7 +1,7 @@
   import * as THREE from 'three';
   import Stats from 'three/examples/jsm/libs/stats.module.js'
   import {Escenario} from "../utils/escenario";
-  import {actualizarContador, finNivelMensaje, gameOver} from "../utils/htmlElements";
+  import {actualizarContador, drawLine, finNivelMensaje, gameOver} from "../utils/htmlElements";
   import {Pacman} from "../utils/pacman";
   import {Fantasma} from "../utils/fantasma";
 
@@ -53,9 +53,10 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaC = new Fantasma(scene, 2, 0.5, 1)
+    let fantasmaR = new Fantasma(scene, 6, 0.5, 10)
+    let fantasmaP = new Fantasma(scene, 6, 0.5, 9)
 
-
+  let fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
   //Prueba de hilos
 
   let worker = new Worker('/work/utils/fantasma.ts')
@@ -64,9 +65,11 @@
     if (puntos < total_puntos && puntos != -3) {
       requestAnimationFrame(animate)
 
-      puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, scene)
+      puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, fantasmas,  scene)
       actualizarContador(puntos)
-      console.log(maze)
+//      pacman.userData['direccionActual'] = 65
+
+      drawLine(pacman?.userData['direccionActual'])
         //TODO hacer que el fantasma se mueva en un hilo aparte
 
       //fantasmaC.movimientoFantasma(pacman, maze, 10000)
@@ -87,11 +90,17 @@
     //TODO retirar al finalizar la actividad
     stats.update()
   }
-  setInterval(moveGhostEvery10Seconds, 1000);
+  setInterval(moveGhostEvery10Seconds, 1000, 1000);
+  setInterval(moverFantasma, 3000, 1000);
 
-  function moveGhostEvery10Seconds() {
-    fantasmaC.movimientoFantasma(pacman, maze, 1000);
+
+  function moveGhostEvery10Seconds(t : any) {
+    fantasmaR.movimientoFantasma(pacman, maze, t);
   }
+  function moverFantasma(t : any){
+    fantasmaP.movimientoFantasma(pacman, maze, t)
+  }
+
   // Función para mover el fantasma cada 10 segundos
 
 

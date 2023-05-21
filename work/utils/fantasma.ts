@@ -53,7 +53,7 @@ export class Fantasma{
   }
 
   movimientoFantasma(posFinal : any, matrix : any, t_max : any){
-    console.log("Movimiento fantasma", posFinal.position.x, posFinal.position.z)
+    //console.log("Movimiento fantasma", posFinal.position.x, posFinal.position.z)
     this.matrizOriginal = matrix
     this.modificarLaberinto()
 
@@ -67,35 +67,22 @@ export class Fantasma{
     if (camino.length > 0) {
       let movimiento = camino.pop()
       let max = camino.length
-      let intervalo = t_max / 5; // 1 segundo (1000 milisegundos)
+      let intervalo = t_max / 4; // 1 segundo (1000 milisegundos)
 
-
+      //TODO corregir que el fantasma deje igual la posicion a la que llego cuando se vaya de esa posicion
       const movimientoTemporizado = () => {
         let valorMatriz = matrix[this.fantasma.position.x][this.fantasma.position.z]
 
         if (max > 0 && movimiento != undefined) {
 
-          matrix[this.fantasma.position.x][this.fantasma.position.z] = 0
-          let pasos = 0
-          let pasoX = movimiento.i / 4
-          let pasoZ = movimiento.j /4
-          let pasoX_fa = this.fantasma.position.x / 4
-          let pasoZ_fa = this.fantasma.position.z / 4
-          console.log("Fantasma: ", this.fantasma.position.x, this.fantasma.position.z)
+          //matrix[this.fantasma.position.x][this.fantasma.position.z] = 0
 
-            while (pasos <= 3){
-              const relentizaMovimiento = () =>{
+          this.fantasma.position.x += -this.fantasma.position.x +movimiento.i
+          this.fantasma.position.z += -this.fantasma.position.z +movimiento.j
 
-              this.fantasma.position.x += -pasoX_fa + pasoX;
-              this.fantasma.position.z += -pasoZ_fa+ pasoZ;
-              pasos++
-                setTimeout(relentizaMovimiento, 300)
-              }
-              relentizaMovimiento()
-          }
           valorMatriz = matrix[this.fantasma.position.x][this.fantasma.position.z]
 
-          matrix[this.fantasma.position.x][this.fantasma.position.z] = 3
+          //Wmatrix[this.fantasma.position.x][this.fantasma.position.z] = 3
           movimiento = camino.pop();
           max = camino.length + 1
           setTimeout(movimientoTemporizado, intervalo);
@@ -136,7 +123,7 @@ export class Fantasma{
 
             if (vecino.i == final_x && vecino.j == final_y) {
               //Necesitamos saber el camino que se va a seguir
-              console.log(vecino)
+              //console.log(vecino)
 
               //Con esto nos aseguramos que el fantasma llegue hasta la posicion del pacman y no una antes
               vecino.padre = actual.ID
