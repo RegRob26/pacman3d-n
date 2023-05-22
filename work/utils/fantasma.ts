@@ -19,18 +19,20 @@ export class Fantasma{
   colorOriginal : any
   public timeInterval : any
   public hardMode : boolean = false
-  constructor(scene : any, x : any, y : any, z : any) {
+  constructor(scene : any, x : any, y : any, z : any, colorO : any) {
     this.fantasmaInicial = {x: x, y: y, z: z}
-    this.fantasma = this.dibujarFantasma(scene, x, y, z)
+    this.fantasma = this.dibujarFantasma(scene, x, y, z, colorO)
     const color= this.fantasma.material.color
      this.colorOriginal = color.getHex()
   }
 
-  dibujarFantasma(scene : any, x : number, y : number, z : number){
+  dibujarFantasma(scene : any, x : number, y : number, z : number, color : any){
+
+
     const cubeGeometry = new THREE.SphereGeometry(0.5, 32, 32);
 
     //Dame el codigo hexadecimal de un color amarillo
-    const material = new THREE.MeshLambertMaterial({color: 0xff0000});
+    const material = new THREE.MeshStandardMaterial({color: color, roughness: 0.4, metalness: 0.8});
     let fantasma = new THREE.Mesh(cubeGeometry, material);
 
     fantasma.position.x = x
@@ -62,6 +64,7 @@ export class Fantasma{
     //console.log("Movimiento fantasma", posFinal.position.x, posFinal.position.z)
     this.matrizOriginal = matrix
     hardMode = this.hardMode
+    console.log("Hardmode: ", this.hardMode)
     this.modificarLaberinto()
 
     let x_pacman = Math.round(pacman.pacman.position.x)
@@ -131,6 +134,7 @@ export class Fantasma{
 
     let actual = k_valor
     // Coordenadas relativas de los vecinos
+
     //const coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
     let coordenadasRelativas
 

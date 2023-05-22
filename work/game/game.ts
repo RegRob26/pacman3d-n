@@ -56,8 +56,8 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaR = new Fantasma(scene, 13, 0.5, 12)
-    let fantasmaP = new Fantasma(scene, 13, 0.5, 13)
+    let fantasmaR = new Fantasma(scene, 13, 0.5, 12, 0xff0000)
+    let fantasmaP = new Fantasma(scene, 13, 0.5, 13, 0xff00ff)
 
   let fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
   let int1
@@ -68,6 +68,7 @@
 
     let reconfigurar;
     if (puntos < total_puntos) {
+      console.log(total_puntos)
       if (pacmanC.fantasma == 3) {
         dibujaVida(pacmanC.vidas)
         if (pacmanC.vidas == 0) {
@@ -87,22 +88,26 @@
           clearInterval(fantasmaR.timeInterval)
           scene.remove(fantasmaP.fantasma)
           scene.remove(fantasmaR.fantasma)
-          fantasmaR = new Fantasma(scene, 13, 0.5, 12)
-          fantasmaP = new Fantasma(scene, 13, 0.5, 13)
+          fantasmaR = new Fantasma(scene, 13, 0.5, 12, 0xff0000)
+          fantasmaP = new Fantasma(scene, 13, 0.5, 13, 0xff00ff)
           fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
           //escenario.dibujarLaberinto(escenario.maze, mazeObject, true, scene)
           pacman.position.set(27, 0.5, 13)
-          puntos = puntosTotal + puntos
+          puntos = puntos
         }
       }
 
       puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, fantasmas, scene)
       actualizarContador(puntosTotal + puntos)
+
+      if (pacmanC.poderUsado == true && pacmanC.sumarPuntos == true) {
+        total_puntos += 20
+        pacmanC.sumarPuntos = false
+      }
+
     } else {
-      console.log("fin del juego")
       if (contador_niveles < 2) {
-        fantasmaR.hardMode = true
-        fantasmaP.hardMode = true
+
         finNivelMensaje(false)
         setTimeout(finNivelMensaje, 1000, true)
         contador_niveles++
@@ -112,17 +117,24 @@
           clearInterval(fantasmaR.timeInterval)
           scene.remove(fantasmaP.fantasma)
           scene.remove(fantasmaR.fantasma)
-          fantasmaR = new Fantasma(scene, 13, 0.5, 12)
-          fantasmaP = new Fantasma(scene, 13, 0.5, 13)
+          fantasmaR = new Fantasma(scene, 13, 0.5, 12, 0xff0000)
+          fantasmaP = new Fantasma(scene, 13, 0.5, 13, 0xff00ff)
+          fantasmaR.hardMode = true
+          fantasmaP.hardMode = true
           fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
           escenario.dibujarLaberinto(escenario.maze, mazeObject, true, scene)
           pacman.position.set(27, 0.5, 13)
+          pacmanC.controlls.speed = 0.085
           puntosTotal = puntosTotal + puntos
           puntos = 0
         }
         reconfigurar()
       } else {
         finNivelMensaje(false)
+
+        let setInt = setInterval(() => {
+          window.history.back()
+        }, 5000)
         return;
       }
     }
@@ -138,7 +150,7 @@
       int2 = setInterval(moverFantasma,  time2, time2, hardMode, reinicio);
   }
 
-  configurarJuego(250, 300, 100, false, false)
+  configurarJuego(300, 350, 100, false, false)
 
 
   function moveGhostEvery10Seconds(t : any, reset : any, hardMode : any) {

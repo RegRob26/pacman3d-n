@@ -41,6 +41,10 @@ export class Escenario {
     this.total_puntos = this.detectarPuntos(this.maze)
   }
 
+  createSolidColorMaterial = (solidColor) => {
+    return new THREE.MeshPhongMaterial( { color: solidColor } );
+  }
+
   dibujarLaberinto(matrix: any, mazeObject: any, reinicio: any, scene: any) {
     let labyrinth = []
     let pacman
@@ -50,6 +54,9 @@ export class Escenario {
       scene.background = new THREE.Color(0x000000)
       const ambientLight = new THREE.AmbientLight(0xffffff); // Color y intensidad
       scene.add(ambientLight);
+
+      this.agregarLampara(scene, 2, 10, 2)
+      this.agregarLampara(scene, 25, 10, 25)
     }
 
 
@@ -62,8 +69,10 @@ export class Escenario {
           const geometry = new THREE.BoxGeometry(1, 0.5, 1);
           geometry.computeBoundingBox();
 
-          const material = new THREE.MeshStandardMaterial({color: 0x007fff, roughness: 1, metalness: 0.3});
-          const wall = new THREE.Mesh(geometry, material);
+          const wallMaterial = this.createSolidColorMaterial(0x004fff);
+          const wall = new THREE.Mesh(geometry, wallMaterial);
+
+          let geo = new THREE.EdgesGeometry(geometry);
 
           wall.position.x = i;
           wall.position.z = j;
@@ -145,7 +154,7 @@ export class Escenario {
 
     //Dame el codigo hexadecimal de un color amarillo
 
-    const material = new THREE.MeshLambertMaterial({color: 0xffff00});
+    const material = new THREE.MeshStandardMaterial({color: 0xffff00, roughness: 0.4, metalness: 0.8});
     let pacman = new THREE.Mesh(cubeGeometry, material);
 
     pacman.position.x = x

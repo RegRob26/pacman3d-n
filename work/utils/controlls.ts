@@ -13,6 +13,7 @@ export class Controlls{
   private eventoTecla : boolean = false
   public teclaPresionada : any
   public contadorTecla : any = 0
+  public speed : number = 0.075
   constructor(renderer : any) {
     this.colisiones = new Colisiones()
     this.cameraC = new Camera()
@@ -43,7 +44,7 @@ export class Controlls{
   onKeyDown(event: any, pacman: any, laberinto: any) {
     //TODO arreglar los controles porque no detecta cuando no esta viendo hacia el lado en el que inicia, entonces
     // se desorientan los controles y gira para lados poco naturales
-    let speed = 0.075;
+    let speed = this.speed
     let posicionNueva;
     let pacmanRadio = 0.5
       switch (event) {

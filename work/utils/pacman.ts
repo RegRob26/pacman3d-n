@@ -7,7 +7,7 @@ import {Audio} from "./audio";
 
 export class Pacman{
   private colisiones: any
-  private controlls : any
+  controlls : any
   public camaraC : any
   public camera: any
   public pacman : any
@@ -16,6 +16,7 @@ export class Pacman{
   public vidas : number = 3
   public poderUsado : boolean = false
   private sonido : any
+  public sumarPuntos : boolean = false
   constructor(pacman : any, key : any, renderer : any) {
     // Clase colisiones
     this.sonido = new Audio()
@@ -28,6 +29,7 @@ export class Pacman{
 
     this.pacman = pacman
     this.key = key
+
   }
 
   movimientoPacman(maze : any, mazeObject : any, puntos : any, fantasmas : any, scene : any){
@@ -52,6 +54,7 @@ export class Pacman{
       if (this.fantasma == 0 && this.poderUsado == false){
         puntos += 20
         this.poderUsado = true
+        this.sumarPuntos = true
         this.sonido.audioComerFantasma.play()
       }
     }

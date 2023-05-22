@@ -3,7 +3,9 @@ export function actualizarContador(puntos : any) {
   if (contador !== null) {
     contador.innerHTML = "Score: " + puntos
     // Aplica un tamaño de fuente mayor al elemento
-    contador.style.fontSize = "30px";
+    contador.style.fontSize = "25px";
+    contador.style.fontFamily = "pacman";
+
   }
 }
 
@@ -19,6 +21,8 @@ else{
     contador.innerHTML = 'NIVEL COMPLETADO.'
     // Aplica un tamaño de fuente mayor al elemento
     contador.style.fontSize = "50px";
+    contador.style.fontFamily = "pacman";
+
   }
 }
 
@@ -26,11 +30,15 @@ else{
 
 export function gameOver() {
   let contador = document.getElementById("gameOver")
+
+
   contador.innerHTML = ''
   if (contador !== null) {
-    contador.innerHTML = 'Has perdido!'
+    contador.innerHTML = 'Game Over!'
+
     // Aplica un tamaño de fuente mayor al elemento
     contador.style.fontSize = "50px";
+    contador.style.fontFamily = "pacman";
     contador.style.color = "red";
   }
 }
@@ -42,9 +50,11 @@ export function mensajeVidaPerdida(borrar : any) {
   }
   else{
     if (contador !== null) {
-      contador.innerHTML = 'Has perdido una vida!'
+      contador.innerHTML = 'Una vida menos!'
+      contador.style.fontFamily = "pacman";
+
       // Aplica un tamaño de fuente mayor al elemento
-      contador.style.fontSize = "50px";
+      contador.style.fontSize = "40px";
       contador.style.color = "red";
     }
 
