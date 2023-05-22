@@ -3,42 +3,62 @@ import * as THREE from "three";
 export class Escenario {
   maze: number[][]
   total_puntos: number
+  private original : any
   constructor( mazeObject : any, scene : any) {
-    this.maze = [
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 0, 0, 0, 0, 2, 1, -1, -1, -1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-      [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
+    this.original = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 1, 1, 1, -1, -1, 1, 1, 1, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 0, 0, 0, 1, -1, -1, -1, -1, -1, -1, 1, 0, 0, 0, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, -1, -1, -1, -1, -1],
+      [-1, -1, -1, -1, -1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1,-1, -1, -1, -1, -1],
+      [1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+      [1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1],
+      [1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+      [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
     ]
+    this.maze = JSON.parse(JSON.stringify(this.original))
     this.total_puntos = this.detectarPuntos(this.maze)
   }
 
-  dibujarLaberinto(matrix: any, mazeObject: any, scene: any) {
+  dibujarLaberinto(matrix: any, mazeObject: any, reinicio: any, scene: any) {
     let labyrinth = []
     let pacman
-    scene.background = new THREE.Color(0x000000)
 
-    const ambientLight = new THREE.AmbientLight(0xffffff); // Color y intensidad
-    scene.add(ambientLight);
+
+    if (!reinicio) {
+      scene.background = new THREE.Color(0x000000)
+      const ambientLight = new THREE.AmbientLight(0xffffff); // Color y intensidad
+      scene.add(ambientLight);
+    }
 
 
     // Recorrer la matriz y dibujar las paredes
     for (let i = 0; i < matrix.length; i++) {
-      mazeObject[i] = []
+      if (!reinicio)
+        mazeObject[i] = []
       for (let j = 0; j < matrix[i].length; j++) {
-        if (matrix[i][j] === 1) {
+        if (matrix[i][j] === 1 && !reinicio) {
           const geometry = new THREE.BoxGeometry(1, 0.5, 1);
           geometry.computeBoundingBox();
 
@@ -58,27 +78,44 @@ export class Escenario {
         }
 
         //Esto posiblemente se cambie hacia la clase pacman
-        if (matrix[i][j] === 2) {
+        if (matrix[i][j] === 2 && !reinicio) {
           pacman = this.dibujarPacman(scene, i, 0.5, j)
           mazeObject[i][j] = {
             valor: matrix[i][j],
             objeto: pacman
           };
         }
-        if (matrix[i][j] === 0) {
+
+        if (matrix[i][j] === 0 && !reinicio) {
           const punto = this.dibujarPuntos(scene, i, 0.5, j, 0.1)
           mazeObject[i][j] = {
             valor: matrix[i][j],
             objeto: punto
           };
         }
-        if (matrix[i][j] === -1) {
+        if (matrix[i][j] === -1 ) {
           mazeObject[i][j] = {
             valor: matrix[i][j],
             objeto: undefined
           };
         }
-        if (matrix[i][j] === 3) {
+        if (matrix[i][j] === -2 ) {
+          matrix[i][j] = 0
+          const punto = this.dibujarPuntos(scene, i, 0.5, j, 0.1)
+          mazeObject[i][j] = {
+            valor: matrix[i][j],
+            objeto : punto
+          };
+        }
+        if (matrix[i][j] === -3 ) {
+          matrix[i][j] = 3
+          const punto = this.dibujarPuntos(scene, i, 0.5, j, 0.3)
+          mazeObject[i][j] = {
+            valor: matrix[i][j],
+            objeto: punto
+          };
+        }
+        if (matrix[i][j] === 3 && !reinicio) {
           const punto = this.dibujarPuntos(scene, i, 0.5, j, 0.3)
           mazeObject[i][j] = {
             valor: matrix[i][j],
@@ -88,6 +125,9 @@ export class Escenario {
         }
       }
     }
+
+
+
     return pacman
   }
 
@@ -101,7 +141,7 @@ export class Escenario {
   }
 
   private dibujarPacman(scene: any, x: any, y: any, z: any) {
-    const cubeGeometry = new THREE.SphereGeometry(0.25, 32, 32);
+    const cubeGeometry = new THREE.SphereGeometry(0.5, 32, 32);
 
     //Dame el codigo hexadecimal de un color amarillo
 

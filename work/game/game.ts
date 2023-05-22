@@ -1,7 +1,7 @@
   import * as THREE from 'three';
   import Stats from 'three/examples/jsm/libs/stats.module.js'
   import {Escenario} from "../utils/escenario";
-  import {actualizarContador, drawLine, finNivelMensaje, gameOver} from "../utils/htmlElements";
+  import {actualizarContador, dibujaVida, finNivelMensaje, gameOver, mensajeVidaPerdida} from "../utils/htmlElements";
   import {Pacman} from "../utils/pacman";
   import {Fantasma} from "../utils/fantasma";
 
@@ -12,7 +12,7 @@
   const stats = new Stats()
   stats.showPanel(0)
   document.body.appendChild(stats.dom)
-
+    let puntosTotal : number = 0
   /*
   Zona de declaración de variables e instanciación de clases
    */
@@ -40,7 +40,7 @@
 
   let key: any
 
-  pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, scene)
+  pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, false, scene)
   let pacmanC = new Pacman(pacman, key, renderer)
 
   /*
@@ -53,50 +53,98 @@
   /*
    * Instancia de clase fantasma
    */
-    let fantasmaR = new Fantasma(scene, 5, 0.5, 10)
-    let fantasmaP = new Fantasma(scene, 5, 0.5, 9)
+    let fantasmaR = new Fantasma(scene, 13, 0.5, 12)
+    let fantasmaP = new Fantasma(scene, 13, 0.5, 13)
 
   let fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
+  let int1
+  let int2
+  let puntos_pacman = 0
+  let contador_niveles = 0
   function animate() {
 
-    if (puntos < total_puntos && puntos != -3) {
-      requestAnimationFrame(animate)
+    let reconfigurar;
+    if (puntos < total_puntos) {
+      if (pacmanC.fantasma == 3) {
+        dibujaVida(pacmanC.vidas)
+        if (pacmanC.vidas == 0) {
+          gameOver()
+          return
+        } else {
+          mensajeVidaPerdida(false)
+          setInterval(mensajeVidaPerdida, 3000, true)
 
-      puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, fantasmas,  scene)
-      actualizarContador(puntos)
 
-      renderer.render(scene, pacmanC.camera)
-    }
-    else{
-      if (puntos == -3){
-        gameOver()
-        return
-      }else {
-        finNivelMensaje()
+          clearInterval(fantasmaP.timeInterval)
+          clearInterval(fantasmaR.timeInterval)
+          scene.remove(fantasmaP.fantasma)
+          scene.remove(fantasmaR.fantasma)
+          fantasmaR = new Fantasma(scene, 13, 0.5, 12)
+          fantasmaP = new Fantasma(scene, 13, 0.5, 13)
+          fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
+          //escenario.dibujarLaberinto(escenario.maze, mazeObject, true, scene)
+          pacman.position.set(27, 0.5, 13)
+          puntos = puntosTotal + puntos
+        }
+      }
 
+      puntos = pacmanC.movimientoPacman(maze, mazeObject, puntos, fantasmas, scene)
+      actualizarContador(puntosTotal + puntos)
+    } else {
+      console.log("fin del juego")
+      if (contador_niveles < 2) {
+        fantasmaR.hardMode = true
+        fantasmaP.hardMode = true
+        finNivelMensaje(false)
+        setTimeout(finNivelMensaje, 1000, true)
+        contador_niveles++
+
+        reconfigurar = () => {
+          clearInterval(fantasmaP.timeInterval)
+          clearInterval(fantasmaR.timeInterval)
+          scene.remove(fantasmaP.fantasma)
+          scene.remove(fantasmaR.fantasma)
+          fantasmaR = new Fantasma(scene, 13, 0.5, 12)
+          fantasmaP = new Fantasma(scene, 13, 0.5, 13)
+          fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
+          escenario.dibujarLaberinto(escenario.maze, mazeObject, true, scene)
+          pacman.position.set(27, 0.5, 13)
+          puntosTotal = puntosTotal + puntos
+          puntos = 0
+        }
+        reconfigurar()
+      } else {
+        finNivelMensaje(false)
+        return;
       }
     }
-
+    requestAnimationFrame(animate)
+    renderer.render(scene, pacmanC.camera)
 
     //TODO retirar al finalizar la actividad
     stats.update()
   }
-  setInterval(moveGhostEvery10Seconds, 1000, 1000);
-  setInterval(moverFantasma, 3000, 1000);
 
-
-  function moveGhostEvery10Seconds(t : any) {
-    fantasmaR.movimientoFantasma(pacmanC, maze, t);
+  function configurarJuego(time1 : any, time2 : any, time3 : any, reinicio : any, hardMode : any){
+      int1 = setInterval(moveGhostEvery10Seconds, time1, time1, hardMode, reinicio);
+      int2 = setInterval(moverFantasma,  time2, time2, hardMode, reinicio);
   }
-  function moverFantasma(t : any){
-    fantasmaP.movimientoFantasma(pacmanC, maze, t)
+
+  configurarJuego(200, 300, 100, false, false)
+
+
+  function moveGhostEvery10Seconds(t : any, reset : any, hardMode : any) {
+    fantasmaR.movimientoFantasma(pacmanC, maze, t, hardMode, reset);
+  }
+  function moverFantasma(t : any, reset : any, hardMode : any){
+    fantasmaP.movimientoFantasma(pacmanC, maze, t, hardMode, reset )
   }
 
   // Función para mover el fantasma cada 10 segundos
 
 
   // Ejecutar la función de movimiento del fantasma cada 10 segundos
-
+  dibujaVida(pacmanC.vidas)
   animate()
   pacmanC.eventoTeclado(maze)
 

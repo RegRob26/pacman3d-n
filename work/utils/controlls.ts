@@ -45,7 +45,7 @@ export class Controlls{
     // se desorientan los controles y gira para lados poco naturales
     let speed = 0.07;
     let posicionNueva;
-    let pacmanRadio = 0.30
+    let pacmanRadio = 0.5
       switch (event) {
       case 87: // Tecla "w"
         posicionNueva = new THREE.Vector3(Math.round(pacman.position.x - speed - pacmanRadio),

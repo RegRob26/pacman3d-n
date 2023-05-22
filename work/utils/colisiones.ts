@@ -15,10 +15,17 @@ export class Colisiones{
   detectarColisionFantasma(pacman: any, fantasmas: any) {
     // Obtener la posición actual del pacman
     for (let fantasma of fantasmas) {
+      console.log(Math.round(fantasma.position.x), Math.round(pacman.x), Math.round(fantasma.position.z), Math.round(pacman.z))
       if (Math.round(fantasma.position.x) === Math.round(pacman.x) &&
           Math.round(fantasma.position.z) === Math.round(pacman.z) &&
           this.powerUp === false) {
         return 3
+      }
+      if (Math.round(fantasma.position.x) === Math.round(pacman.x) &&
+          Math.round(fantasma.position.z) === Math.round(pacman.z) &&
+          this.powerUp === true) {
+
+        return 0
       }
     }
   }
@@ -27,6 +34,7 @@ export class Colisiones{
   detectarColisionPunto(pacman: any, mazeObject: any, maze: any, scene: any, puntos: any){
     // Obtener la posición actual del pacman
 
+
     const pacmanPosicion = new THREE.Vector3(
       Math.round(pacman.position.x),
       pacman.position.y,
@@ -34,28 +42,24 @@ export class Colisiones{
     );
     let arreglo = mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto
 
+
+
+
     if (maze[pacmanPosicion.x][pacmanPosicion.z] === 0) {
-      maze[pacmanPosicion.x][pacmanPosicion.z] = -1
+      maze[pacmanPosicion.x][pacmanPosicion.z] = -2
 
       scene.remove(mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto)
 
-
-      mazeObject[pacmanPosicion.x][pacmanPosicion.z].valor = -1
+      mazeObject[pacmanPosicion.x][pacmanPosicion.z].valor = -2
 
       puntos++
     }
     if (maze[pacmanPosicion.x][pacmanPosicion.z] === 3) {
-        maze[pacmanPosicion.x][pacmanPosicion.z] = -1
-
+        maze[pacmanPosicion.x][pacmanPosicion.z] = -3
         scene.remove(mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto)
-
-        mazeObject[pacmanPosicion.x][pacmanPosicion.z].valor = -1
-
+        mazeObject[pacmanPosicion.x][pacmanPosicion.z].valor = -3
+        //mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto = undefined
         puntos += 3
-
-      //give me a function to make a clock of 10 seconds for the power up and then change to false again
-
-
       this.powerUp = true
 
       //Despues de x segundos se desactiva el powerUp

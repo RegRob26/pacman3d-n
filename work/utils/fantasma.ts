@@ -15,18 +15,19 @@ export class Fantasma{
   public fantasma : any;
   private laberintoModificado : any
   private matrizOriginal : any
-  private fantasmaInicial : any
+  public fantasmaInicial : any
   colorOriginal : any
+  public timeInterval : any
+  public hardMode : boolean = false
   constructor(scene : any, x : any, y : any, z : any) {
     this.fantasmaInicial = {x: x, y: y, z: z}
     this.fantasma = this.dibujarFantasma(scene, x, y, z)
     const color= this.fantasma.material.color
      this.colorOriginal = color.getHex()
-    console.log("Color original: ", this.colorOriginal)
   }
 
   dibujarFantasma(scene : any, x : number, y : number, z : number){
-    const cubeGeometry = new THREE.SphereGeometry(0.25, 32, 32);
+    const cubeGeometry = new THREE.SphereGeometry(0.5, 32, 32);
 
     //Dame el codigo hexadecimal de un color amarillo
     const material = new THREE.MeshLambertMaterial({color: 0xff0000});
@@ -57,9 +58,10 @@ export class Fantasma{
     this.laberintoModificado = modificado
   }
 
-  movimientoFantasma(pacman : any, matrix : any, t_max : any){
+  movimientoFantasma(pacman : any, matrix : any, t_max : any, hardMode : any, reset : any){
     //console.log("Movimiento fantasma", posFinal.position.x, posFinal.position.z)
     this.matrizOriginal = matrix
+    hardMode = this.hardMode
     this.modificarLaberinto()
 
     let x_pacman = Math.round(pacman.pacman.position.x)
@@ -67,67 +69,56 @@ export class Fantasma{
 
     let x_fantasma = Math.round(this.fantasma.position.x)
     let z_fantasma = Math.round(this.fantasma.position.z)
+    if (!reset){
+      if (pacman.colisiones.powerUp === true){
 
-    console.log("PACMAAAN: ", pacman)
-    if (pacman.colisiones.powerUp === true){
+        this.fantasma.material.color.setHex(0x0000ff)
+        let camino = this.astarPrueba(x_fantasma, z_fantasma, this.fantasmaInicial.x, this.fantasmaInicial.z , matrix, hardMode)
+        if (camino.length > 0) {
+          let movimiento = camino.pop()
+          let max = camino.length
+          let intervalo = t_max / camino.length; // 1 segundo (1000 milisegundos)
 
-      console.log("Pacman tiene powerUp", this.fantasma.material.color)
-      this.fantasma.material.color.setHex(0x0000ff)
-      let camino = this.astarPrueba(x_fantasma, z_fantasma, this.fantasmaInicial.x, this.fantasmaInicial.z , matrix)
-      if (camino.length > 0) {
-        let movimiento = camino.pop()
-        let max = camino.length
-        let intervalo = t_max / 4; // 1 segundo (1000 milisegundos)
+          //TODO corregir que el fantasma deje igual la posicion a la que llego cuando se vaya de esa posicion
 
-        //TODO corregir que el fantasma deje igual la posicion a la que llego cuando se vaya de esa posicion
-        const movimientoTemporizado = () => {
-          if (max > 0 && movimiento != undefined) {
-            for (let step = 0; step < 4; step++) {
-              this.fantasma.position.x += 0.25 * (movimiento.i - this.fantasma.position.x);
-              this.fantasma.position.z += 0.25 * (movimiento.j - this.fantasma.position.z);
-            }
+            this.fantasma.position.x += (movimiento.i - this.fantasma.position.x);
+            this.fantasma.position.z += (movimiento.j - this.fantasma.position.z);
 
             movimiento = camino.pop();
             max = camino.length + 1;
-            setTimeout(movimientoTemporizado, intervalo);
-          }
+
         }
-
-        movimientoTemporizado();
       }
-    }
-    else {
-      this.fantasma.material.color.setHex(this.colorOriginal)
-      let camino = this.astarPrueba(x_fantasma, z_fantasma, x_pacman, z_pacman, matrix)
-      if (camino.length > 0) {
-        let movimiento = camino.pop()
-        let max = camino.length
-        let intervalo = t_max / 4; // 1 segundo (1000 milisegundos)
+      else {
+        this.fantasma.material.color.setHex(this.colorOriginal)
+        let camino = this.astarPrueba(x_fantasma, z_fantasma, x_pacman, z_pacman, matrix, hardMode)
+        if (camino.length > -1) {
+          let movimiento = camino.pop()
+          let max = camino.length
 
-        //TODO corregir que el fantasma deje igual la posicion a la que llego cuando se vaya de esa posicion
-        const movimientoTemporizado = () => {
-          if (max > 0 && movimiento != undefined) {
+          //TODO corregir que el fantasma deje igual la posicion a la que llego cuando se vaya de esa posicion
 
-            this.fantasma.position.x += -this.fantasma.position.x +movimiento.i
-            this.fantasma.position.z += -this.fantasma.position.z +movimiento.j
+            if (max >= 0 && movimiento != undefined) {
 
-            movimiento = camino.pop();
-            max = camino.length + 1
-            setTimeout(movimientoTemporizado, intervalo);
-          }
+              this.fantasma.position.x += -this.fantasma.position.x +movimiento.i
+              this.fantasma.position.z += -this.fantasma.position.z +movimiento.j
+
+              movimiento = camino.pop();
+              console.log(camino, x_pacman, z_pacman)
+              max = camino.length + 1
+            }
+
         }
-        movimientoTemporizado();
       }
+
     }
-
-
-
-
-
+    else{
+      clearTimeout(this.timeInterval)
+    }
 
   }
 
-  astarPrueba(inicial_x : any, inicial_z : any,  final_x : any, final_y : any, matrix : any) {
+  astarPrueba(inicial_x : any, inicial_z : any,  final_x : any, final_y : any, matrix : any, hardMode : any) {
     let listaAbierta = []
     let listaCerrada = []
 
@@ -140,8 +131,11 @@ export class Fantasma{
 
     let actual = k_valor
     // Coordenadas relativas de los vecinos
-    const coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
-   // const coordenadasRelativas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    //const coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
+    let coordenadasRelativas
+
+    if (hardMode) coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
+    else coordenadasRelativas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
     let pasos = 0
     while (!(actual.i === final_x && actual.j === final_y)) {
 
@@ -169,7 +163,6 @@ export class Fantasma{
                 camino.push(elemento)
                 elemento = listaCerrada.filter(element => element.ID === elemento.padre)[0]
               }
-
                 return camino
             }
             if (Math.abs(dx + dy) === 2 || Math.abs(dx + dy) === 0) {
@@ -181,7 +174,7 @@ export class Fantasma{
 
             this.laberintoModificado[newRow][newCol].padre = actual.ID
             let resultado = Math.abs(vecino.i -final_x) +  Math.abs(vecino.j - final_y)
-            this.laberintoModificado[newRow][newCol].H = resultado * vecino.G * 0.2
+            this.laberintoModificado[newRow][newCol].H = resultado * vecino.G
             this.laberintoModificado[newRow][newCol].F = vecino.G + vecino.H
 
             listaAbierta.push(this.laberintoModificado[newRow][newCol]);

@@ -11,7 +11,9 @@ export class Pacman{
   public camera: any
   public pacman : any
   public key : any
-  private fantasma : any
+  public fantasma : any
+  public vidas : number = 3
+  public poderUsado : boolean = false
   constructor(pacman : any, key : any, renderer : any) {
     // Clase colisiones
     this.colisiones = new Colisiones()
@@ -30,16 +32,28 @@ export class Pacman{
     // Actualiza la posición de la cámara en relación al objeto
     this.camaraC.actualizarDireccionCamara(this.pacman, this.camera)
     // Hace que la cámara mire al objeto a seguir
-    this.camera.lookAt(this.pacman.position)
+    let posicion = new THREE.Vector3(15, 0, 10)
+    this.camera.lookAt(posicion)
     this.controlls.onKeyDown(this.key, this.pacman, maze)
     puntos = this.colisiones.detectarColisionPunto(this.pacman, mazeObject, maze, scene, puntos)
 
     let posicionNueva = new THREE.Vector3(Math.round(this.pacman.position.x),
         this.pacman.position.y,
         Math.round(this.pacman.position.z))
+
     this.fantasma = this.colisiones.detectarColisionFantasma(posicionNueva, fantasmas)
-    if(this.fantasma){
-      return -3
+    if(this.fantasma == 3){
+      this.vidas--
+      return puntos
+    }
+    else{
+      if (this.fantasma == 0 && this.poderUsado == false){
+        puntos += 20
+        this.poderUsado = true
+      }
+    }
+    if (this.colisiones.powerUp == false){
+      this.poderUsado = false
     }
     return puntos
   }
