@@ -1,29 +1,30 @@
-<doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Pacman 3D</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styleLogo.css" type="text/css">
+    <style>
+        html{
+            background: yellow;
+        }
+    </style>
+
+    <title>Pac-Man</title>
 </head>
 <body>
-<div style="position: fixed; left: 10%; bottom: 20px; transform: translateX(-50%); ">
-  <p id="contador" style="color: yellow; font-size: 20px">
-  </p>
-</div>
-<div style="position: fixed; left: 60%; bottom: 0; transform: translateX(-10%); ">
-  <p id="cambioNivel" style="color: yellow; font-size: 20px">
-  </p>
-</div>
-<div style="position: fixed; left: 50%; top: 30%; transform: translate(-50%, -50%);">
-    <p id="gameOver" style="color: yellow; font-size: 20px;"></p>
+<div id="imagenDiv">
+    <img id="logoPacman" src="work/assets/pacman_logo.png"  alt="logo" height="296" width="1132">
 </div>
 
-<div id="linea" style="position: fixed; left: 50%; top: 30%; transform: translate(-50%, -50%);">
+<div id="musica_principal">
+    <audio src="work/assets/sound/pacman_load.mp3" autoplay loop></audio>
 </div>
 
-<div id="vida"  style="position: absolute; left: 8%; bottom: 10px; transform: translateX(-20%); ">
 
+<div id="cetBot">
+    <button onclick="location.href='pacman.html'" id="boton">
+        <span id="textoBoton">Iniciar</span>
+    </button>
 </div>
-
 </body>
-<script type="module" src="./work/game/game.ts"></script>
 </html>

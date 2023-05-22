@@ -72,6 +72,11 @@
         dibujaVida(pacmanC.vidas)
         if (pacmanC.vidas == 0) {
           gameOver()
+
+          let setInt = setInterval(() => {
+            window.history.back()
+          }, 5000)
+
           return
         } else {
           mensajeVidaPerdida(false)
