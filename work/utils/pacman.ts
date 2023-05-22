@@ -3,6 +3,7 @@ import {Controlls} from "./controlls";
 import {Camera} from "./camera";
 import {actualizarContador} from "./htmlElements";
 import * as THREE from "three";
+import {Audio} from "./audio";
 
 export class Pacman{
   private colisiones: any
@@ -14,9 +15,11 @@ export class Pacman{
   public fantasma : any
   public vidas : number = 3
   public poderUsado : boolean = false
+  private sonido : any
   constructor(pacman : any, key : any, renderer : any) {
     // Clase colisiones
-    this.colisiones = new Colisiones()
+    this.sonido = new Audio()
+    this.colisiones = new Colisiones(this.sonido)
     //Clase Controles
     this.controlls = new Controlls(renderer)
     //Clase camara
@@ -25,7 +28,6 @@ export class Pacman{
 
     this.pacman = pacman
     this.key = key
-
   }
 
   movimientoPacman(maze : any, mazeObject : any, puntos : any, fantasmas : any, scene : any){
@@ -50,6 +52,7 @@ export class Pacman{
       if (this.fantasma == 0 && this.poderUsado == false){
         puntos += 20
         this.poderUsado = true
+        this.sonido.audioComerFantasma.play()
       }
     }
     if (this.colisiones.powerUp == false){

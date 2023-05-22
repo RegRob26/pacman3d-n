@@ -2,7 +2,9 @@ import * as THREE from "three";
 
 export class Colisiones{
   public powerUp : boolean = false
-  constructor() {
+  private sonido : any
+  constructor(sonido : any = null) {
+    this.sonido = sonido
   }
 
   detectarColisionBarrera(pacman: any, maze: any) {
@@ -19,12 +21,21 @@ export class Colisiones{
       if (Math.round(fantasma.position.x) === Math.round(pacman.x) &&
           Math.round(fantasma.position.z) === Math.round(pacman.z) &&
           this.powerUp === false) {
+        this.sonido.audioMuerte.play()
+        this.sonido.audioMuerteFin.loop = true
+        //this.sonido.audioMuerteFin.play()
+        setInterval(() => {
+          this.sonido.audioMuerteFin.stop()
+        }, 2000)
+        setTimeout(() => {
+          this.sonido.audioMuerteFin.play()
+        }, 2500)
+
         return 3
       }
       if (Math.round(fantasma.position.x) === Math.round(pacman.x) &&
           Math.round(fantasma.position.z) === Math.round(pacman.z) &&
           this.powerUp === true) {
-
         return 0
       }
     }
@@ -46,6 +57,7 @@ export class Colisiones{
 
 
     if (maze[pacmanPosicion.x][pacmanPosicion.z] === 0) {
+      this.sonido.audioComer.play()
       maze[pacmanPosicion.x][pacmanPosicion.z] = -2
 
       scene.remove(mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto)
@@ -53,8 +65,11 @@ export class Colisiones{
       mazeObject[pacmanPosicion.x][pacmanPosicion.z].valor = -2
 
       puntos++
+
     }
     if (maze[pacmanPosicion.x][pacmanPosicion.z] === 3) {
+      this.sonido.audioPowerUp.loop = true
+      this.sonido.audioPowerUp.play()
         maze[pacmanPosicion.x][pacmanPosicion.z] = -3
         scene.remove(mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto)
         mazeObject[pacmanPosicion.x][pacmanPosicion.z].valor = -3
@@ -64,6 +79,7 @@ export class Colisiones{
 
       //Despues de x segundos se desactiva el powerUp
       setTimeout(() => {
+        this.sonido.audioPowerUp.stop()
         this.powerUp = false
       }, 7000);
     }

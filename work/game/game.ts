@@ -4,6 +4,7 @@
   import {actualizarContador, dibujaVida, finNivelMensaje, gameOver, mensajeVidaPerdida} from "../utils/htmlElements";
   import {Pacman} from "../utils/pacman";
   import {Fantasma} from "../utils/fantasma";
+  import {Audio} from "../utils/audio";
 
 
   // Declaracion de variables para mostrar los fps en la pantalla del juego
@@ -42,6 +43,8 @@
 
   pacman = escenario.dibujarLaberinto(escenario.maze, mazeObject, false, scene)
   let pacmanC = new Pacman(pacman, key, renderer)
+
+  let audio = new Audio()
 
   /*
   * Creación del escenerio
@@ -130,7 +133,7 @@
       int2 = setInterval(moverFantasma,  time2, time2, hardMode, reinicio);
   }
 
-  configurarJuego(200, 300, 100, false, false)
+  configurarJuego(250, 300, 100, false, false)
 
 
   function moveGhostEvery10Seconds(t : any, reset : any, hardMode : any) {
@@ -145,6 +148,9 @@
 
   // Ejecutar la función de movimiento del fantasma cada 10 segundos
   dibujaVida(pacmanC.vidas)
+
+
+
   animate()
   pacmanC.eventoTeclado(maze)
 
