@@ -58,17 +58,17 @@
    */
     let fantasmaR = new Fantasma(scene, 13, 0.5, 12, 0xff0000)
     let fantasmaP = new Fantasma(scene, 13, 0.5, 13, 0xff00ff)
-
   let fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
+
   let int1
   let int2
   let puntos_pacman = 0
   let contador_niveles = 0
-  function animate() {
 
+  function animate() {
     let reconfigurar;
     if (puntos < total_puntos) {
-      console.log(total_puntos)
+      //console.log(total_puntos)
       if (pacmanC.fantasma == 3) {
         dibujaVida(pacmanC.vidas)
         if (pacmanC.vidas == 0) {
@@ -86,12 +86,14 @@
 
           clearInterval(fantasmaP.timeInterval)
           clearInterval(fantasmaR.timeInterval)
+
           scene.remove(fantasmaP.fantasma)
           scene.remove(fantasmaR.fantasma)
+
           fantasmaR = new Fantasma(scene, 13, 0.5, 12, 0xff0000)
           fantasmaP = new Fantasma(scene, 13, 0.5, 13, 0xff00ff)
           fantasmas = [fantasmaR.fantasma, fantasmaP.fantasma]
-          //escenario.dibujarLaberinto(escenario.maze, mazeObject, true, scene)
+
           pacman.position.set(27, 0.5, 13)
           puntos = puntos
         }
@@ -109,12 +111,8 @@
       if (contador_niveles < 2) {
 
         finNivelMensaje(false)
-        setTimeout(finNivelMensaje, 1000, true)
+        setTimeout(finNivelMensaje, 3000, true)
         contador_niveles++
-
-        reconfigurar = () => {
-          clearInterval(fantasmaP.timeInterval)
-          clearInterval(fantasmaR.timeInterval)
           scene.remove(fantasmaP.fantasma)
           scene.remove(fantasmaR.fantasma)
           fantasmaR = new Fantasma(scene, 13, 0.5, 12, 0xff0000)
@@ -125,10 +123,11 @@
           escenario.dibujarLaberinto(escenario.maze, mazeObject, true, scene)
           pacman.position.set(27, 0.5, 13)
           pacmanC.controlls.speed = 0.085
+          total_puntos = escenario.total_puntos
           puntosTotal = puntosTotal + puntos
+
           puntos = 0
-        }
-        reconfigurar()
+        console.log(puntos, total_puntos, puntosTotal)
       } else {
         finNivelMensaje(false)
 
@@ -160,14 +159,7 @@
     fantasmaP.movimientoFantasma(pacmanC, maze, t, hardMode, reset )
   }
 
-  // Función para mover el fantasma cada 10 segundos
-
-
-  // Ejecutar la función de movimiento del fantasma cada 10 segundos
   dibujaVida(pacmanC.vidas)
-
-
-
   animate()
   pacmanC.eventoTeclado(maze)
 

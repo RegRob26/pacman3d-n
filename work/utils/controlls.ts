@@ -2,24 +2,22 @@ import * as THREE from "three";
 import {Colisiones} from "./colisiones";
 import {Camera} from "./camera";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
-import {finNivelMensaje} from "./htmlElements";
 
 export class Controlls{
   private colisiones : any
   private cameraC : any
   private camera : any
   private combinaciones : any
-  private combinacionActual : any
-  private eventoTecla : boolean = false
-  public teclaPresionada : any
-  public contadorTecla : any = 0
   public speed : number = 0.075
   constructor(renderer : any) {
+
     this.colisiones = new Colisiones()
     this.cameraC = new Camera()
     this.camera = this.cameraC.camera
-    this.crearOrbitControls(renderer)
 
+    /**
+     * @deprecated
+     */
     this.combinaciones = [
         {87: 87, 83: 83, 65: 65, 68: 68},
         {87: 68, 83: 65, 65: 87, 68: 83},
@@ -28,6 +26,10 @@ export class Controlls{
     ]
   }
 
+
+   /**
+   * @deprecated
+   */
   crearOrbitControls(renderer : any){
     let orbitControls = new OrbitControls(this.camera, renderer.domElement)
     orbitControls.enableDamping = true

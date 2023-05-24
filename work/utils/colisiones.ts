@@ -17,7 +17,7 @@ export class Colisiones{
   detectarColisionFantasma(pacman: any, fantasmas: any) {
     // Obtener la posición actual del pacman
     for (let fantasma of fantasmas) {
-      console.log(Math.round(fantasma.position.x), Math.round(pacman.x), Math.round(fantasma.position.z), Math.round(pacman.z))
+      //console.log(Math.round(fantasma.position.x), Math.round(pacman.x), Math.round(fantasma.position.z), Math.round(pacman.z))
       if (Math.round(fantasma.position.x) === Math.round(pacman.x) &&
           Math.round(fantasma.position.z) === Math.round(pacman.z) &&
           this.powerUp === false) {
@@ -52,9 +52,6 @@ export class Colisiones{
       Math.round(pacman.position.z)
     );
     let arreglo = mazeObject[pacmanPosicion.x][pacmanPosicion.z].objeto
-
-
-
 
     if (maze[pacmanPosicion.x][pacmanPosicion.z] === 0) {
       this.sonido.audioComer.play()

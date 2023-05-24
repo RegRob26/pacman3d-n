@@ -19,16 +19,15 @@ export class Fantasma{
   colorOriginal : any
   public timeInterval : any
   public hardMode : boolean = false
+
   constructor(scene : any, x : any, y : any, z : any, colorO : any) {
     this.fantasmaInicial = {x: x, y: y, z: z}
     this.fantasma = this.dibujarFantasma(scene, x, y, z, colorO)
     const color= this.fantasma.material.color
-     this.colorOriginal = color.getHex()
+    this.colorOriginal = color.getHex()
   }
 
   dibujarFantasma(scene : any, x : number, y : number, z : number, color : any){
-
-
     const cubeGeometry = new THREE.SphereGeometry(0.5, 32, 32);
 
     //Dame el codigo hexadecimal de un color amarillo
@@ -62,9 +61,10 @@ export class Fantasma{
 
   movimientoFantasma(pacman : any, matrix : any, t_max : any, hardMode : any, reset : any){
     //console.log("Movimiento fantasma", posFinal.position.x, posFinal.position.z)
+
     this.matrizOriginal = matrix
     hardMode = this.hardMode
-    console.log("Hardmode: ", this.hardMode)
+
     this.modificarLaberinto()
 
     let x_pacman = Math.round(pacman.pacman.position.x)
@@ -89,7 +89,6 @@ export class Fantasma{
 
             movimiento = camino.pop();
             max = camino.length + 1;
-
         }
       }
       else {
@@ -107,7 +106,6 @@ export class Fantasma{
               this.fantasma.position.z += -this.fantasma.position.z +movimiento.j
 
               movimiento = camino.pop();
-              console.log(camino, x_pacman, z_pacman)
               max = camino.length + 1
             }
 
@@ -134,8 +132,6 @@ export class Fantasma{
 
     let actual = k_valor
     // Coordenadas relativas de los vecinos
-
-    //const coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
     let coordenadasRelativas
 
     if (hardMode) coordenadasRelativas = [[-1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1], [1, 0], [0, -1], [0, 1]];
@@ -175,7 +171,6 @@ export class Fantasma{
               this.laberintoModificado[newRow][newCol].G = 10 + actual.G
             }
 
-
             this.laberintoModificado[newRow][newCol].padre = actual.ID
             let resultado = Math.abs(vecino.i -final_x) +  Math.abs(vecino.j - final_y)
             this.laberintoModificado[newRow][newCol].H = resultado * vecino.G
@@ -187,7 +182,6 @@ export class Fantasma{
               //Pendiente por si se tiene que agregar algo mas
               this.laberintoModificado[newRow][newCol].G = vecino.G + actual.G
               this.laberintoModificado[newRow][newCol].padre = actual.ID
-
             }
           }
         }
