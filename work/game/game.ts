@@ -6,7 +6,8 @@ import {Pacman} from "../utils/pacman";
 import {Fantasma} from "../utils/fantasma";
 import {Audio} from "../utils/audio";
 import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
-
+import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
+import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js';
 
 // Declaracion de variables para mostrar los fps en la pantalla del juego
 //TODO quitar cuando el juego se haya terminado
@@ -38,11 +39,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement)
 
 
-/**
- * Zona de prueba para vr
- */
-document.body.appendChild( VRButton.createButton( renderer ) );
-renderer.xr.enabled = true;
+
 // Crear una escena de realidad virtual
 
 
@@ -81,11 +78,66 @@ let int1
 let int2
 let puntos_pacman = 0
 let contador_niveles = 0
+
+
+/**
+ * Más pruebas de VR
+ */
+
+
+/**
+ * Zona de prueba para vr
+ */
+scene.add( new THREE.HemisphereLight( 0xbcbcbc, 0xa5a5a5 ) );
+
+renderer.xr.enabled = true;
+renderer.shadowMap.enabled = true
+
+document.body.appendChild( VRButton.createButton( renderer ) );
+
+
+let controller1 = renderer.xr.getController( 0 );
+scene.add( controller1 );
+
+let controller2 = renderer.xr.getController( 1 );
+scene.add( controller2 );
+
+const controllerModelFactory = new XRControllerModelFactory();
+const handModelFactory = new XRHandModelFactory();
+
+// Hand 1
+let controllerGrip1 = renderer.xr.getControllerGrip( 0 );
+controllerGrip1.add( controllerModelFactory.createControllerModel( controllerGrip1 ) );
+scene.add( controllerGrip1 );
+
+let hand1 = renderer.xr.getHand( 0 );
+hand1.add( handModelFactory.createHandModel( hand1 ) );
+console.log("Mostrar mano 1", hand1)
+scene.add( hand1 );
+
+// Hand 2
+let controllerGrip2 = renderer.xr.getControllerGrip( 1 );
+controllerGrip2.add( controllerModelFactory.createControllerModel( controllerGrip2 ) );
+scene.add( controllerGrip2 );
+
+let hand2 = renderer.xr.getHand( 1 );
+hand2.add( handModelFactory.createHandModel( hand2 ) );
+scene.add( hand2 );
+//
+const geometry = new THREE.BufferGeometry().setFromPoints( [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, - 1 ) ] );
+
+const line = new THREE.Line( geometry );
+line.name = 'line';
+line.scale.z = 5;
+
+controller1.add( line.clone() );
+controller2.add( line.clone() );
+
 function animate() {
 
   let reconfigurar;
   if (puntos < total_puntos) {
-    console.log(total_puntos)
+    //console.log(total_puntos)
     if (pacmanC.fantasma == 3) {
       dibujaVida(pacmanC.vidas)
       if (pacmanC.vidas == 0) {
@@ -155,7 +207,14 @@ function animate() {
       return;
     }
   }
-  renderer.xr.getCamera().lookAt( pacmanC.camera.position);
+  try {
+    pacmanC.controlls.onBottonPressed(hand1.buttons, pacmanC, maze)
+  }
+    catch (error) {
+      console.log("Error en el controlador 1")
+    }
+
+
   renderer.setAnimationLoop(animate); // where "animate" is your render/animate function
 
   renderer.render(scene, pacmanC.camera)
@@ -164,25 +223,9 @@ function animate() {
   stats.update()
 }
 
-renderer.xr.addEventListener('sessionstart', (e) => {
 
-  //controls.update();
 
-  const baseReferenceSpace = renderer.xr.getReferenceSpace();
 
-  const offsetPosition = pacmanC.camera.position;
-
-  //const offsetRotation = camera.rotation;
-
-  const offsetRotation = pacmanC.camera.quaternion;
-
-  //const transform = new XRRigidTransform( {x: 0, y : -12, z : 40}, { x: 0, y: offsetRotation.y, z: 0} );
-  const transform = new XRRigidTransform( {x: 0, y : -12, z : 40}, { x: offsetRotation.x, y: -(offsetRotation.y - 0.85), z: offsetRotation.z, w: offsetRotation.w } );
-  const teleportSpaceOffset = baseReferenceSpace.getOffsetReferenceSpace( transform );
-
-  renderer.xr.setReferenceSpace( teleportSpaceOffset );
-
-});
 
 function configurarJuego(time1 : any, time2 : any, time3 : any, reinicio : any, hardMode : any){
   int1 = setInterval(moveGhostEvery10Seconds, time1, time1, hardMode, reinicio);
@@ -208,5 +251,5 @@ dibujaVida(pacmanC.vidas)
 
 
 animate()
-pacmanC.eventoTeclado(maze)
+pacmanC.eventoTeclado(maze, renderer)
 

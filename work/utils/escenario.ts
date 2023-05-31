@@ -37,6 +37,7 @@ export class Escenario {
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
     ]
+    this.agregarLampara(scene, -2, 10, -2)
     this.maze = JSON.parse(JSON.stringify(this.original))
     this.total_puntos = this.detectarPuntos(this.maze)
   }

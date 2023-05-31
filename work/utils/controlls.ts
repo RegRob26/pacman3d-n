@@ -102,4 +102,22 @@ export class Controlls{
 
     }
   }
+
+  onBottonPressed(buttons : any, pacman : any, laberinto){
+    let speed= this.speed
+    let posicionNueva;
+    let pacmanRadio = 0.5
+    console.log("Detectando botones")
+    if (buttons[5].pressed){
+      posicionNueva = new THREE.Vector3(Math.round(pacman.position.x - speed - pacmanRadio),
+          pacman.position.y,
+          Math.round(pacman.position.z))
+
+      if (this.colisiones.detectarColisionBarrera(posicionNueva, laberinto)) return;
+
+      pacman.position.x -= speed;
+      pacman.userData['direccionReal'] = 87
+      pacman.userData['direccionActual'] = event
+    }
+  }
 }

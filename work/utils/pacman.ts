@@ -64,12 +64,24 @@ export class Pacman{
     return puntos
   }
 
-  eventoTeclado(maze : any){
+  eventoTeclado(maze : any, renderer : any){
     window.addEventListener('keydown', (event: any) => {
       this.pacman.userData['direccionAnterior'] = this.key
       this.key = event.keyCode
 
       this.controlls.onKeyDown(this.key, this.pacman, maze)
+    })
+
+
+    const controllerGrip0 = renderer.xr.getControllerGrip(0)
+    let flag_vr = false
+    let controller1;
+    controllerGrip0.addEventListener("connected", (e) => {
+      //ESta función se ejecuta cuando se conecta un control del vr, en especifico cuando se da click al boton de enter vr
+      flag_vr = true
+      controllerGrip0.gamepad = e.data.gamepad
+      console.log(controllerGrip0.gamepad.buttons)
+      this.controlls.onBottonPressed(controllerGrip0.gamepad.buttons, this.pacman, maze);
     })
   }
 }
