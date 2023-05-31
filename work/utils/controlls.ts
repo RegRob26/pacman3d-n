@@ -103,21 +103,63 @@ export class Controlls{
     }
   }
 
-  onBottonPressed(buttons : any, pacman : any, laberinto){
+  onBottonPressed(buttons : any, pacman : any, laberinto, mano : any){
     let speed= this.speed
     let posicionNueva;
     let pacmanRadio = 0.5
-    console.log("Detectando botones")
-    if (buttons[5].pressed){
-      posicionNueva = new THREE.Vector3(Math.round(pacman.position.x - speed - pacmanRadio),
-          pacman.position.y,
-          Math.round(pacman.position.z))
+    if (mano){
+      if (buttons[5].pressed){
+        posicionNueva = new THREE.Vector3(Math.round(pacman.position.x - speed - pacmanRadio),
+            pacman.position.y,
+            Math.round(pacman.position.z))
 
-      if (this.colisiones.detectarColisionBarrera(posicionNueva, laberinto)) return;
+        if (this.colisiones.detectarColisionBarrera(posicionNueva, laberinto)) return;
 
-      pacman.position.x -= speed;
-      pacman.userData['direccionReal'] = 87
-      pacman.userData['direccionActual'] = event
+        pacman.position.x -= speed;
+        pacman.userData['direccionReal'] = 87
+        pacman.userData['direccionActual'] = event
+      }
+
+      if (buttons[4].pressed){
+        posicionNueva = new THREE.Vector3(Math.round(pacman.position.x + speed + pacmanRadio),
+            pacman.position.y,
+            Math.round(pacman.position.z))
+
+        if (this.colisiones.detectarColisionBarrera(posicionNueva, laberinto)) return;
+
+        pacman.position.x += speed;
+        pacman.userData['direccionReal'] = 83
+      }
     }
+    else{
+      if (buttons[5].pressed){
+        posicionNueva = new THREE.Vector3(Math.round(pacman.position.x),
+            pacman.position.y,
+            Math.round(pacman.position.z + speed + pacmanRadio))
+
+        if (this.colisiones.detectarColisionBarrera(posicionNueva, laberinto)) return;
+
+        pacman.userData['direccionReal'] = 65
+        pacman.userData['direccionActual'] = event
+        pacman.position.z += speed;
+      }
+
+      if (buttons[4].pressed){
+        posicionNueva = new THREE.Vector3(Math.round(pacman.position.x),
+            pacman.position.y,
+            Math.round(pacman.position.z + speed - pacmanRadio))
+
+        if (this.colisiones.detectarColisionBarrera(posicionNueva, laberinto)) return;
+
+        pacman.userData['direccionReal'] = 68
+        pacman.userData['direccionActual'] = event
+        pacman.position.z -= speed;
+      }
+    }
+
+
+
   }
+
+
 }

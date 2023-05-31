@@ -83,5 +83,16 @@ export class Pacman{
       console.log(controllerGrip0.gamepad.buttons)
       this.controlls.onBottonPressed(controllerGrip0.gamepad.buttons, this.pacman, maze);
     })
+
+    const controllerGrip1 = renderer.xr.getControllerGrip(1)
+    let flag_vr_1 = false
+    let controller2;
+    controllerGrip1.addEventListener("connected", (e) => {
+      //ESta función se ejecuta cuando se conecta un control del vr, en especifico cuando se da click al boton de enter vr
+      flag_vr = true
+      controllerGrip1.gamepad = e.data.gamepad
+      console.log(controllerGrip1.gamepad.buttons)
+      this.controlls.onBottonPressed(controllerGrip1.gamepad.buttons, this.pacman, maze);
+    })
   }
 }

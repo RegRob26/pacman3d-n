@@ -93,7 +93,13 @@ scene.add( new THREE.HemisphereLight( 0xbcbcbc, 0xa5a5a5 ) );
 renderer.xr.enabled = true;
 renderer.shadowMap.enabled = true
 
-document.body.appendChild( VRButton.createButton( renderer ) );
+let flag_realidad_virtual = false
+const vrButton = VRButton.createButton( renderer );
+document.body.appendChild( vrButton );
+vrButton.addEventListener( 'click', function () {
+  console.log("Boton de vr presionado")
+  flag_realidad_virtual = true
+})
 
 
 let controller1 = renderer.xr.getController( 0 );
@@ -207,12 +213,13 @@ function animate() {
       return;
     }
   }
-  try {
-    pacmanC.controlls.onBottonPressed(hand1.buttons, pacmanC, maze)
+  if (flag_realidad_virtual) {
+    console.log(controllerGrip1.gamepad.buttons)
+    pacmanC.controlls.onBottonPressed(controllerGrip1.gamepad.buttons, pacman, maze, true)
+    console.log(controllerGrip2.gamepad.buttons)
+    pacmanC.controlls.onBottonPressed(controllerGrip2.gamepad.buttons, pacman, maze, false)
   }
-    catch (error) {
-      console.log("Error en el controlador 1")
-    }
+
 
 
   renderer.setAnimationLoop(animate); // where "animate" is your render/animate function
